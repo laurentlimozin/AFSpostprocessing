@@ -20,9 +20,6 @@ def MakeGraphXYall(d0, imax, n, refrms, name, outname, OutFormat, SaveGraph, cor
    #     (X,Y,Z,MinLUT,SSIM255)=track(d0, i)
         X = d0['ROI{:04d}'.format(i)+' X (nm)'][:]
         Y = d0['ROI{:04d}'.format(i)+' Y (nm)'][:]
-        Z = d0['ROI{:04d}'.format(i)+' Z (nm)'][:]
-        MinLUT = d0['ROI{:04d}'.format(i)+' MinLUT'][:]
-        SSIM = d0['ROI{:04d}'.format(i)+' SSIM'][:]
         if corr: X=X-Xr0avg; Y=Y-Yr0avg
         xx=X[::n]; yy=Y[::n]
         ds=np.sqrt((X-X.mean())**2+(Y-Y.mean())**2)
@@ -47,7 +44,7 @@ def Plot3D(x,y,z,n, refname, outname, OutFormat, SaveGraph):    # 3D plot
         ax.scatter(xx, yy, zz, marker=m)
     if SaveGraph: plt.savefig(outname+refname+OutFormat)
 
-def MakeGraphXY(X1, Y1, X2, Y2, xmin, xmax, ymin, ymax, label1, label2, refname, outname, OutFormat, line1=False, line2=False, log=False):
+def MakeGraphXY(X1, Y1, X2, Y2, xmin, xmax, ymin, ymax, label1, label2, refname, SaveGraph, outname, OutFormat, line1=False, line2=False, log=False):
     figname=refname+'_XY'
     plt.figure(figname, figsize=(6,6), dpi=100); ax = plt.gca()
     if line1: 
@@ -65,8 +62,12 @@ def MakeGraphXY(X1, Y1, X2, Y2, xmin, xmax, ymin, ymax, label1, label2, refname,
 def SingleTrace(refname, d0, n,m, X,Y,Z,T, MinLUT, SaveGraph, outname, OutFormat):    # SingleTrace(30,10, 0,0,0,0,0)
 # Traces time traces and histograms for bead n (step m) or coordinates if n<=0
     if n>0:
-        (X,Y,Z,MinLUT,SSIM)=track(d0, n); lab=str(n)        # test bead
-        T = tdms_file.object('Tracking data', 'Time (ms)').data
+        X = d0['ROI{:04d}'.format(n)+' X (nm)'][:]
+        Y = d0['ROI{:04d}'.format(n)+' Y (nm)'][:]
+        Z = d0['ROI{:04d}'.format(n)+' Z (nm)'][:]
+        MinLUT = d0['ROI{:04d}'.format(n)+' MinLUT'][:]
+        lab=str(n)
+        T = d0['Time (ms)'][:]
     T_s=(1/1000.)*T
     if n==0: lab='Corr by ref'
     if n==-1: lab='ref'

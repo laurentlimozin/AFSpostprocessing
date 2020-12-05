@@ -27,7 +27,7 @@ Created on Sun Sep 29 19:33:24 2019
                 Anchor point can be calculated on zero force interval; use AnchorPointState variable
                 Faxen correction for x,y
 20200620 v3.8   Use of step_detect gaussian1dfilter (copy step_detect.py in main folder)
-         v3.81  Step visualization in FindJumps2() and graph saving
+         v3.81  Step visualization in FindJumps() and graph saving
          v3.83  PullAngle2 calculated between high force and zero force state
 20200703 v3.85  Correct bug for start / stop
          v3.86  Records absolute coordinates; calculate fit error on force
@@ -55,10 +55,10 @@ import os
 import step_detect_2 as sd
 import AFS_JDNA_Graphs as AFSG
 from scipy.ndimage.filters import gaussian_filter1d
-
+import warnings
+warnings.filterwarnings("ignore")
 np.random.seed(444); plt.close('all')
-import warnings; warnings.filterwarnings("ignore")
-def pfl(f): return '{:.2E}'.format(f)
+#def pfl(f): return '{:.2E}'.format(f)
 
 #path1="C:/DATA/Experiences Diverses/AFS/Data/Debug20201002/"      #☺ data folder
 path1="/home/laurent/DATA/Experiences Diverses/AFS/Data/" #☺ data folder  #path1="D:/Jim/JDNA/2020-08-24/FOV3/"  
@@ -77,36 +77,39 @@ nbead=len(b); fname=[""]*nbead; start=np.zeros(nbead, dtype=int); stop=np.zeros(
 #for nf in range(nbead): fname[nf] = tdmsfilename; start[nf]=15000; stop[nf]=1600000; load[nf]=nf==0  # stop[nf]=1600000
 for nf in range(nbead): fname[nf] = tdmsfilename; start[nf]=0.*60*1000/18; stop[nf]=175*60*1000/18; load[nf]=nf==0  # stop[nf]=1600000
 range_anchorpoint=(0,10000)
-range_spectrum=(1000, 2000)
+range_spectrum=(1000, 2000); Select_range_spectrum=True
 
 ##========================= ========================= =========================
+# General settings
 loaddata=True  # to load the tdms file
 RefBeadZcorrection=True # correction with reference bead
 RefBeadXYcorrection=True # correction with reference bead
 AnchorPointStateList=['0 force'] # correction with AnchorPoint as determined by anchor point  'low force' or '0 force' or 'custom' ; or 'None': no anchor point 
 export=False # to produce csv files of raw data (for Charlie)
-GraphTdms=False  # graph of frame rate and force data (duration and amplitude of 2 steps)
-GraphDhisto=False; GraphTupdown=False; GraphTZ_Power=True
-HistoZ=True; GraphXYZ=False # characteristics of trajectory of the selected beads
-pprint=True; # printing detailed infos in console window
-GraphXYall=False; iminXY=0; imaxXY=0 # display xy trajectories with number on a single graph
-SaveGraph=True; OutFormat=".jpg" ; CloseAfterSave=False # alternative ".jpg" or ".pdf" 
-DisplaySpectrum=True
-DisplayCloseOpen=True
-DisplayGaussianFits=False
-DisplayJumpGraphs=True # graphs of jump analysis
-DrawSuperposal=False # graph of superposition of jump traces
 CalculateSurvival=False  # calculate and draw survival curve
 tshiftsurvival=0; 
-DisplaySurvival=True
-Display3D=False
-DisplayplotvariableNZlavg=False
 step_detectON=True; plot_detect=False; nbplot_detect=15; thres_detect=0.5; windowsize_detect=20 # parameters for gaussian step detection
 NZavg=100; NZlavg=400; dzjump=80.; NZrefavg=5000; tol=0.01; sample=1; sampleGraph=100 # parameters for direct step detection
 MiddleOpenClose=900
 BeadRad=790. # Bead Radius in nm
 fmin=0.1; fmax=15.   # frequency range for spectrum fit (Hz)
 p1Lo0=1000; p1Lc0=800; p1Ll0=500; p1Zl0=500  # guess for histogram fit
+
+# Print and display options
+pprint=True; # printing detailed infos in console window
+SaveGraph=True; OutFormat=".jpg" ; CloseAfterSave=False # alternative ".jpg" or ".pdf" 
+GraphTdms=False  # graph of frame rate and force data (duration and amplitude of 2 steps)
+GraphDhisto=False; GraphTupdown=False; GraphTZ_Power=True
+HistoZ=True; GraphXYZ=True # characteristics of trajectory of the selected beads
+GraphXYall=False; iminXY=0; imaxXY=0 # display xy trajectories with number on a single graph
+DisplaySpectrum=True
+DisplayCloseOpen=True
+DisplayGaussianFits=False
+DisplayJumpGraphs=True # graphs of jump analysis
+DrawSuperposal=False # graph of superposition of jump traces
+DisplaySurvival=True
+Display3D=False
+DisplayplotvariableNZlavg=False
 
 ##========================= ========================= =========================
 
@@ -130,7 +133,6 @@ def BuildP(T, TE, NE, DE):      # builds power time trace form event times
     print('BuildP:', len(TP), 'events') #   print(TP)
     P=np.zeros(len(T)); j1=0
     for i in range(1,len(TP)-1):
-   #     j=int(np.where(T==TP[i])[0])
         j=int(np.where(T==TP[i])[0][0])
         P[j1:j]=DP[i-1]; j1=j
     return P
@@ -146,7 +148,6 @@ def time(d0, Graph):    # retrieves time trace from tdms file and measures time 
         ax.set_xlabel("Time step (ms)");  ax.set_ylabel("Number"); ax.set_yscale('log')
         plt.ylim(0.1, 1.e7)
         if SaveGraph: plt.savefig(path1+OutputFolder+figname+OutFormat)
-#    mostfreq=np.argmax(np.bincount(dT))
     print('dTrawhisto (frame time ms)', np.amin(dT), np.amax(dT), '  frequency (Hz)', "%.3f" % (1000/np.amax(dT)))   
     return T, 1000/np.amax(dT)
 
@@ -226,7 +227,7 @@ def MakeHistoZ(Zh, Zl, labelZ1, labelZ2, zmin, zmax, refname):  # histogram of 2
     print(labelZ1, len(Zh), labelZ2, len(Zl))
     if SaveGraph: plt.savefig(path1+OutputFolder+figname+OutFormat)
     
-def FindJumps2(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Plow, TEhigh, tol, dzjump, GraphDhisto, refname, pprint):
+def FindJumps(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Plow, TEhigh, tol, dzjump, GraphDhisto, refname, pprint):
     ISup=(NE=='SigGen.Power (%)')*(Phigh*(1-tol)<DE)*(DE<Phigh*(1+tol))
     ISdown=(NE=='SigGen.Power (%)')*(Plow*(1-tol)<DE)*(DE<Plow*(1+tol))
 #    ISdown=(NE=='SigGen.Power (%)')*(DE<=Plow*(1+tol))
@@ -325,6 +326,9 @@ def FindJumps2(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Plow, TEhigh, tol, dzjump
                 Zuphigh, Zupmid, Zupzero, countOpen_, countNoClose_, countNoOpen_)
 
 def FitHistoGaussian(Length, label, display, delta):
+
+    def gauss_function(x, *p): return p[0]*np.exp(-(x-p[1])**2/(2*p[2]**2))
+
     bins=np.linspace(-1500, 2500 ,num=2001)
     Hy, Hx = np.histogram(Length, bins=bins, density=True)
     Hymax=np.argmax(Hy); xHymax=bins[Hymax]   #    print(Hymax, xHymax)
@@ -336,10 +340,8 @@ def FitHistoGaussian(Length, label, display, delta):
     FitHy=gauss_function(Hxt, pEq[0], pEq[1], pEq[2])
     print(label+'Mod',xHymax, '  Gaussian fit: Amp=', "%.3f" % pEq[0], 'Avg=', "%.3f" % pEq[1] , 'SD=', "%.3f" % abs(pEq[2]))
     if display: AFSG.AFSG.MakeGraphXY(Hxt, Hyt, Hxt, FitHy, -1500, 2500, 0.00001, 0.02, label, 'density',
-                            refname+'Hist'+label, path1+OutputFolder, OutFormat, line2=True, log=True)
+                            refname+'Hist'+label, SaveGraph, path1+OutputFolder, OutFormat, line2=True, log=True)
     return pEq[0], pEq[1], pEq[2], xHymax
-
-def gauss_function(x, *p): return p[0]*np.exp(-(x-p[1])**2/(2*p[2]**2))
 
 def Spectrum(xx, axis, p1Zo, fs, label, display, fmin, fmax, axtable=None):
     friction0 = 6*np.pi*1.e-9*BeadRad       # units pN.s/nm
@@ -347,8 +349,9 @@ def Spectrum(xx, axis, p1Zo, fs, label, display, fmin, fmax, axtable=None):
         friction = friction0 / ( 1 - (9/16)*(BeadRad/(p1Zo+BeadRad)) + (1/8)*(BeadRad/(p1Zo+BeadRad))**3 )
     elif axis=='Z':
         friction = friction0 / ( 1 - (9/8)*(BeadRad/(p1Zo+BeadRad)) + (1/2)*(BeadRad/(p1Zo+BeadRad))**3 )
-    def FitSpectrum(x, *p):
-        return p[1]/(2*np.pi**2)/( x**2 + (p[0]/(2*np.pi*friction))**2 )
+
+    def FitSpectrum(x, *p): return p[1]/(2*np.pi**2)/( x**2 + (p[0]/(2*np.pi*friction))**2 )
+
     f, Pxx_spec = signal.periodogram(xx, fs, scaling='density') 
     Pxxt_spec= Pxx_spec[(f>fmin)&(f<fmax)]; ft=f[(f>fmin)&(f<fmax)]
     nbins=101; fbins=np.logspace(-2,2,nbins); Pbins=np.ones(nbins); dPbins=np.zeros(nbins)
@@ -381,14 +384,15 @@ def Spectrum(xx, axis, p1Zo, fs, label, display, fmin, fmax, axtable=None):
         for axbis in wax: axbis.plot(ft, FitPxxt_spec, c='r', alpha=0.8)
         if SaveGraph: plt.savefig(path1+OutputFolder+figname+OutFormat)
         if CloseAfterSave: plt.close()
-    print('Spectrum'+label, ' k (pN/nm)=',pfl(pEq[0]),' D (nm²/s)=',pfl(pEq[1]))
+    print('Spectrum'+label, ' k (pN/nm)=',"%.3f" %  (pEq[0]),' D (nm²/s)=',"%.3f" %  (pEq[1]))
     return pEq[0], pEq[1], eEq[0], eEq[1], friction
-
-def FitExp1(x, *p): return p[1]+(1-p[1])*np.exp(-x/p[0])
-def FitExp0(x, *p): return np.exp(-x/p[0])
 
 def survival(Tupjump_Tuphigh, TEhigh, countNoOpen, shift, refname, color):
 # calculates, fits and plots survival curve until TEhigh/1000.-shift
+
+    def FitExp1(x, *p): return p[1]+(1-p[1])*np.exp(-x/p[0])
+    def FitExp0(x, *p): return np.exp(-x/p[0])
+
     print('Survival:', len(Tupjump_Tuphigh),'countNoOpen=', countNoOpen )
     dur2s=np.sort(Tupjump_Tuphigh[Tupjump_Tuphigh>0])
 #    dur2s=np.sort(np.append(Tupjump_Tuphigh, np.ones(countNoOpen)*TEhigh))
@@ -516,7 +520,7 @@ for ibead in range(nbead):        ## Loop on test beads
 
     if GraphXYall and ibead==0:
         AFSG.MakeGraphXYall(tdms_track, imax, 100, 100, fname[ibead], path1+OutputFolder,
-                            OutFormat, SaveGraph, True, Xr0avg, Yr0avg)
+                            SaveGraph, OutFormat, SaveGraph, True, Xr0avg, Yr0avg)
 
     indnonan=(~np.isnan(Xc))*(~np.isnan(Yc))
     Xc=Xc[indnonan]; Yc=Yc[indnonan]; Zc=Zc[indnonan]
@@ -530,7 +534,8 @@ for ibead in range(nbead):        ## Loop on test beads
     indlow=(P>=Plow*(1-tol))*(P<=Plow*(1+tol)); #indlow=(P<Phigh*0.9)+(P>Pmax)
     ind0force=(P==0)
     indeforce0=(P0==0)
-    maskcustom=(T0>=T0[range_anchorpoint[0]])&(T0<T0[range_anchorpoint[1]])
+    mask_anchor=(T0>=T0[range_anchorpoint[0]])&(T0<T0[range_anchorpoint[1]])
+    mask_spectrum=(T0>=T0[range_spectrum[0]])&(T0<T0[range_spectrum[1]])
         
     p1Lo=p1Lo0; p1Lc=p1Lc0; p1Ll=p1Ll0; p1Zl=p1Zl0  # initialization of gaussian center for fit guess
     for NZlavg in RangeNZlavg:      # test loop for various choices of NZlavg
@@ -543,8 +548,19 @@ for ibead in range(nbead):        ## Loop on test beads
         Zcl=Zcavg[indlow]; Xcl=Xc[indlow]; Ycl=Yc[indlow]; dZl=dZ[indlow]; Pl=P[indlow]+x[indlow]
         Zc0=Zcavg[ind0force]; Xc0=Xc[ind0force]; Yc0=Yc[ind0force]; dZ0=dZ[ind0force]
         Zec0=Zecavg[indeforce0]; Xec0=Xec[indeforce0]; Yec0=Yec[indeforce0]; dZe0=dZe[indeforce0]
-        Zec0custom=Zecavg[maskcustom]; Xec0custom=Xec[maskcustom]; Yec0custom=Yec[maskcustom]; dZe0custom=dZe[maskcustom]
-              
+        Zec0custom=Zecavg[mask_anchor]; Xec0custom=Xec[mask_anchor]; Yec0custom=Yec[mask_anchor]; dZe0custom=dZe[mask_anchor]
+
+        Zcavg=np.convolve(Zc, np.ones((NZavg,))/NZavg, mode=mode)
+        plt.figure('Populations', figsize=(6,6), dpi=100); ax = plt.gca()
+        ax.plot(T, Zcavg, c='m', alpha=0.5, label='Zcavg')
+        ax.scatter(T[indhigh], np.median(Zch)*np.ones(len(T))[indhigh], marker='.', s=3, alpha=0.5, label='indhigh')
+        ax.scatter(T[indlow], np.median(Zcl)*np.ones(len(T))[indlow], marker='.', s=3, alpha=0.5, label='indlow')
+        ax.scatter(T[ind0force], np.median(Zc0)*np.ones(len(T))[ind0force], marker='.', s=3, alpha=0.5, label='ind0force')
+        ax.scatter(T0[indeforce0], np.median(Zec0)*np.ones(len(T0))[indeforce0], marker='.', s=3, alpha=0.5, label='indeforce0')
+        ax.scatter(T0[mask_anchor], np.median(Zec0custom)*np.ones(len(T0))[mask_anchor], marker='.', s=8, alpha=0.5, label='mask_anchor')
+        if Select_range_spectrum: ax.scatter(T0[mask_spectrum], np.zeros(len(T0))[mask_spectrum], marker='.', s=8, alpha=0.5, label='mask_spectrum')
+        ax.legend(fontsize=10)
+
         indstart=(T0<start[ibead]); Z0start=Z0c[indstart]
         Nl=len(Zc[indlow]); Nh=len(Zc[indhigh]); N0=len(Zc[ind0force]); Ntot=len(Zc)
         print('States Populations: low=', Nl, ' high=', Nh, ' 0force=', N0, ' total=', Ntot)        
@@ -567,10 +583,11 @@ for ibead in range(nbead):        ## Loop on test beads
                 else:
                     print('Zc_ null wave:  Bad Anchor Point Reference Choice')
                     break
-#                print('Anchoring point at', AnchorPointState, 'Force. Length calculation', 'min=', pfl(np.min(Zc_)), 'min_',sample, pfl(Za))
+                print('Anchoring point at', AnchorPointState, '. Length calculation', 'min=', "%.3f" % np.min(Zc_), 'min_',sample, "%.3f" %Za)
                 Xa=np.median(Xc_); Ya=np.median(Yc_)     
                 CA=np.sqrt((Xc-Xa)**2+(Yc-Ya)**2+(Zc-Za)**2)
                 Zs=Zc-Za; Xs=Xc-Xa; Ys=Yc-Ya
+                Zs0=Zec-Za; Xs0=Xec-Xa; Ys0=Yec-Ya
             Xsl=Xs[indlow]; Ysl=Ys[indlow]; Zsl=Zs[indlow]; Tl=T[indlow]; MinLUTl=MinLUT[indlow]
             Xsh=Xs[indhigh]; Ysh=Ys[indhigh] ; Zsh=Zs[indhigh]; Th=T[indhigh]; MinLUTh=MinLUT[indhigh]
             Xs0=Ys[ind0force]; Ys0=Ys[ind0force]; Zs0=Zs[ind0force]       
@@ -578,50 +595,24 @@ for ibead in range(nbead):        ## Loop on test beads
             PullAngle=(180/np.pi)*np.arcsin( np.sqrt( (np.median(Xsh)-np.median(Xsl))**2 + (np.median(Ysh)-np.median(Ysl))**2  )/np.median(Lengthh))
             PullAngle2=(180/np.pi)*np.arcsin( np.sqrt( (np.median(Xsh)-np.median(Xs0))**2 + (np.median(Ysh)-np.median(Ys0))**2  )/np.median(Lengthh))            
             print('High length=', "%.3f" % np.median(Lengthh), 'Low length=', "%.3f" % np.median(Lengthl), ' Pulling Angle=', "%.3f" % PullAngle, ' Pulling Angle2=', "%.3f" % PullAngle2)
+
             if Display3D: AFSG.Plot3D(Xs,Ys,Zs, 30, refname+'XsYsZs', path1+OutputFolder, OutFormat, SaveGraph)
-            if HistoZ:
-        #        MakeHistoZ(Zcl, Z0start, 'Zcl', 'Z0start', 0,0, refname+'Z0startZcl')
-        #        MakeHistoZ(Zcl, Zch, 'Zcl', 'Zch', 0,0, refname+'ZchZcl')
-        #        MakeHistoZ(dZl, dZh, 'dZl', 'dZh', -200, 200, refname+'dZhdZl')
-        #        MakeHistoZ(Zc, Zu, 'Zc', 'Zu', 0, 0, refname+'ZcZu')
-        #        MakeHistoZ(Zu, Zr, 'Zu', 'Zr', 0,0, refname+'ZuZr')
-             #   MakeHistoZ(Zc, Zs, 'Zc', 'Zs', -100,1200, refname+'ZcZs')
-                MakeHistoZ(Lengthh, Lengthl, 'Lengthh', 'Lengthl', -100,1200, refname+'LengthhLengthl')
-        #        MakeHistoZ(Length2h, Length2l, 'Lengthh', 'Length2l', 0,0, refname+'LengthhLengthl')
+            if HistoZ: MakeHistoZ(Lengthh, Lengthl, 'Lengthh', 'Lengthl', -100,1200, refname+'LengthhLengthl')
             if GraphXYZ:
-                AFSG.AFSG.MakeGraphXY(Xsl, Ysl, Xsh, Ysh, -dX, dX, -dY, dY, 'XYl', 'XYh', refname+'XYslXYsh', path1+OutputFolder, OutFormat)
-        #        AFSG.AFSG.MakeGraphXY(Pl, Zcl, Ph, Zch, -1, 5,-500, 2000, 'PZcl', 'PZch', refname+'PZclPZch', path1+OutputFolder, OutFormat)
-        #        AFSG.AFSG.MakeGraphXY(Pl, Zsl, Ph, Zsh, -1, 5,-500, 2000, 'PZsl', 'PZsh', refname+'PZslPZsh', path1+OutputFolder, OutFormat)
-        #        AFSG.AFSG.MakeGraphXY(T, Zc, T, Zs, 0, 6500000, -500, 2000, 'Zc', 'Zs', refname+'TZcZs', path1+OutputFolder, OutFormat)
-                AFSG.MakeGraphXY(Tl, Zsl, Th, Zsh, 0, T[-1], -100, 1200, 'Xs', 'Ys', refname+'TZslZsh')
-        #        AFSG.MakeGraphXY(Zsl, MinLUTl, Zsh, MinLUTh, -100, 1200, 0, 12, 'MinLUTl', 'MinLUTh', refname+'ZslLUTlZshLUTh', path1+OutputFolder, OutFormat)
-        #        AFSG.MakeGraphXY(dZl, MinLUTl, dZh, MinLUTh, -300, 300, 0, 12, 'MinLUTl', 'MinLUTh', refname+'dZslLUTldZshLUTh', path1+OutputFolder, OutFormat)
-        #        AFSG.MakeGraphXY(Lengthl, MinLUTl, Lengthh, MinLUTh, -100, 1000, 0, 12, 'MinLUTl', 'MinLUTh', refname+'lengthlLUTllengthhLUTh', path1+OutputFolder, OutFormat)
-        #        AFSG.MakeGraphXY(Length2l, MinLUTl, Length2h, MinLUTh, -100, 1000, 0, 12, 'MinLUTl', 'MinLUTh', refname+'lengthlLUTllengthhLUTh', path1+OutputFolder, OutFormat) 
-        #        AFSG.SingleTrace(tdms_track,0, sampleGraph, Xc, Yc, Zc, T, MinLUT )
-        #        AFSG.SingleTrace(tdms_track,-1,sampleGraph, Xr, Yr, Zr, T, MinLUT )
-                AFSG.SingleTrace(refname, tdms_track, -2,sampleGraph, Xs, Ys, Zs, T, MinLUT, SaveGraph, path1+OutputFolder, OutFormat )
-        #        AFSG.SingleTrace(refname, d0, n,m, X,Y,Z,T, MinLUT, SaveGraph, outname, OutFormat)
-                AFSG.MakeGraphXY(T, Length, T, Zs, 0, T[-1], 0, 1200, 'Length', 'Zs', refname+'Length', path1+OutputFolder, OutFormat)
- 
-            Zsavg=np.convolve(Zs, np.ones((NZavg,))/NZavg, mode=mode)
-            plt.figure('Populations', figsize=(6,6), dpi=100); ax = plt.gca()
-            ax2=ax.twinx(); ax2.plot(T, Zsavg, c='m', alpha=0.5, label='Zsavg')
-            ax.scatter(T[indhigh], np.median(Zch)*np.ones(len(T))[indhigh], marker='.', s=3, alpha=0.5, label='indhigh')
-            ax.scatter(T[indlow], np.median(Zcl)*np.ones(len(T))[indlow], marker='.', s=3, alpha=0.5, label='indlow')
-            ax.scatter(T[ind0force], np.median(Zc0)*np.ones(len(T))[ind0force], marker='.', s=3, alpha=0.5, label='ind0force')
-            ax.scatter(T0[indeforce0], np.median(Zec0)*np.ones(len(T0))[indeforce0], marker='.', s=3, alpha=0.5, label='indeforce0')
-            ax.scatter(T0[maskcustom], np.median(Zec0custom)*np.ones(len(T0))[maskcustom], marker='.', s=8, alpha=0.5, label='maskcustom')
-            ax.legend(fontsize=6)
-             
+                AFSG.MakeGraphXY(Xsl, Ysl, Xsh, Ysh, -dX, dX, -dY, dY, 'XYl', 'XYh', refname+'XYslXYsh', SaveGraph, path1+OutputFolder, OutFormat)
+                AFSG.MakeGraphXY(Tl, Zsl, Th, Zsh, 0, T[-1], -100, 1200, 'Xs', 'Ys', refname+'TZslZsh', SaveGraph, path1+OutputFolder, OutFormat)
+                AFSG.SingleTrace(refname, tdms_track, -2, sampleGraph, Xs, Ys, Zs, T, MinLUT, SaveGraph, path1+OutputFolder, OutFormat )
+                AFSG.MakeGraphXY(T, Length, T, Zs, 0, T[-1], 0, 1200, 'Length', 'Zs', refname+'Length', SaveGraph, path1+OutputFolder, OutFormat)
+              
             print('Opening analysis********')       
+            Zsavg=np.convolve(Zs, np.ones((NZavg,))/NZavg, mode=mode)
             DeltaCOFit=0
             for i in [0]:         #  [0,1] first pass dzjump, 2nd pass DeltaCOFit
                 dzjump_tmp = dzjump*(i==0) + DeltaCOFit*0.7*(i==1)
                 print('Round ',i,' /0  dzjump=',dzjump_tmp)
                 Pdown=0.01
                 (Tup, Dup, Tdown, Ddown, Tupdown, Tupjump, Tuphigh, Zupjump, Zuplow, Zuphigh, Zupmid,Zupzero, countOpen, countNoClose,
-                     countNoOpen)=FindJumps2(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Pdown, TEhigh, tol, dzjump_tmp, GraphDhisto, refname, pprint)
+                     countNoOpen)=FindJumps(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Pdown, TEhigh, tol, dzjump_tmp, GraphDhisto, refname, pprint)
                 Tupdown_Tup=(Tupdown-Tup)/1000.; Tupjump_Tup=(Tupjump-Tup)/1000.
                 Zupjump_Zuphigh=Zupjump-Zuphigh; Tupjump_Tuphigh=(Tupjump-Tuphigh)/1000.
                 Zupjump_Zupmid=Zupjump-Zupmid
@@ -632,6 +623,10 @@ for ibead in range(nbead):        ## Loop on test beads
                     indopen=indopen+(T>Tupjump[nj])*(T<Tupdown[nj])*indhigh
                 Zsclosed=Zs[indclosed]; Tclosed=T[indclosed]; Xsclosed=Xs[indclosed]; Ysclosed=Ys[indclosed]; Lengthclosed=Length[indclosed]
                 Zsopen=Zs[indopen]; Topen=T[indopen]; Xsopen=Xs[indopen]; Ysopen=Ys[indopen]; Lengthopen=Length[indopen]
+                if Select_range_spectrum:
+                    Zsopen_=Zs[indopen]; Xsopen_=Xsopen;  Ysopen_=Ysopen
+                else:
+                    Zsopen_=Zsopen; Xsopen_=Xsopen;  Ysopen_=Ysopen
                 Nc=len(Zsclosed); No=len(Zsopen)
                 print('States Population: close=', Nc, ' open=', No, ' high=', Nh)
                 print('States Fractions: close=',"%.3f" %  (Nc/Nh), ' open=', "%.3f" %  (No/Nh), ' (Nc+No)/Nh=', "%.3f" %  ((Nc+No)/Nh))
@@ -656,22 +651,21 @@ for ibead in range(nbead):        ## Loop on test beads
             print('Power Spectra fits********')
             if nbead>1: axtable0=axAllSpec[ibead,0]; axtable1=axAllSpec[ibead,1]; axtable2=axAllSpec[ibead,2]
             else: axtable0=None; axtable1=None; axtable2=None
-            kx, Dx, dkx, dDx, frictionXY = Spectrum(Xsopen, 'XY', p1Zo, fs,'XsopenRef'+AnchorPointState, DisplaySpectrum, fmin, fmax, axtable=axtable0) 
-            ky, Dy, dky, dDy, frictionXY = Spectrum(Ysopen, 'XY', p1Zo, fs,'YsopenRef'+AnchorPointState, DisplaySpectrum, fmin, fmax, axtable=axtable1)
-            kz, Dz, dkz, dDz, frictionZ = Spectrum(Zsopen, 'Z', p1Zo, fs,'ZsopenRef'+AnchorPointState, DisplaySpectrum, fmin, fmax, axtable=axtable2)
-            Fx=kx*(BeadRad+p1Lo);  Fy=ky*(BeadRad+p1Lo); Fz=kz*(BeadRad+p1Lo)
-            dFx=dkx*(BeadRad+p1Lo);  dFy=dky*(BeadRad+p1Lo); dFz=dkz*(BeadRad+p1Lo)
-            dFy=np.abs(dkx*(BeadRad+p1Lo))+np.abs(kx*p2Lo)
-            dFx=np.abs(dky*(BeadRad+p1Lo))+np.abs(ky*p2Lo)
-            dFz=np.abs(dkz*(BeadRad+p1Lo))+np.abs(kz*p2Lo)
+            kx, Dx, dkx, dDx, frictionXY = Spectrum(Xsopen_, 'XY', p1Zo, fs,'XsopenRef'+AnchorPointState, DisplaySpectrum, fmin, fmax, axtable=axtable0) 
+            ky, Dy, dky, dDy, frictionXY = Spectrum(Ysopen_, 'XY', p1Zo, fs,'YsopenRef'+AnchorPointState, DisplaySpectrum, fmin, fmax, axtable=axtable1)
+            kz, Dz, dkz, dDz, frictionZ = Spectrum(Zsopen_, 'Z', p1Zo, fs,'ZsopenRef'+AnchorPointState, DisplaySpectrum, fmin, fmax, axtable=axtable2)
+            Fx=kx*(BeadRad+p1Lo); dFx=np.abs(dkx*(BeadRad+p1Lo))+np.abs(kx*p2Lo)
+            Fy=ky*(BeadRad+p1Lo); dFy=np.abs(dky*(BeadRad+p1Lo))+np.abs(ky*p2Lo)
+            Fz=kz*(BeadRad+p1Lo); dFz=np.abs(dkz*(BeadRad+p1Lo))+np.abs(kz*p2Lo)
             if nbead>1: 
-                axAllSpec[ibead,0].set_title(str(b[ibead])+' Fx='+str(pfl(Fx)), fontsize=6)
-                axAllSpec[ibead,1].set_title(str(b[ibead])+' Fy='+str(pfl(Fy)), fontsize=6)
-                axAllSpec[ibead,2].set_title(str(b[ibead])+' Fz='+str(pfl(Fz)), fontsize=6)
-            print("Corner frequencies (Hz) x,y,z: ", pfl(kx*Dx/4), pfl(ky*Dy/4), pfl(kz*Dz/4))
-            print("Forces (pN) x,y,z: ", pfl(Fx), pfl(Fy), pfl(Fz), "Forces Errors (pN) x,y,z: ", pfl(dFx), pfl(dFy), pfl(dFz))
+                axAllSpec[ibead,0].set_title(str(b[ibead])+' Fx='+"%.3f" % Fx, fontsize=6)
+                axAllSpec[ibead,1].set_title(str(b[ibead])+' Fy='+"%.3f" % Fy, fontsize=6)
+                axAllSpec[ibead,2].set_title(str(b[ibead])+' Fz='+"%.3f" % Fz, fontsize=6)
+            print("Corner frequencies (Hz) x,y,z: ", "%.3f" %  (kx*Dx/4), "%.3f" %  (ky*Dy/4), "%.3f" %  (kz*Dz/4))
+            print("Forces (pN) x,y,z: ", "%.3f" % Fx, "%.3f" % Fy, "%.3f" % Fz, 
+                  "Forces Errors (pN) x,y,z: ", "%.3f" % dFx, "%.3f" % dFy, "%.3f" % dFz)
             Dxytheo=4/frictionXY; Dztheo=4/frictionZ
-            print("D_by_Dtheo x, y,z: ", pfl(Dx/Dxytheo), pfl(Dy/Dxytheo), pfl(Dz/Dztheo))
+            print("D_by_Dtheo x, y,z: ", "%.3f" %  (Dx/Dxytheo), "%.3f" %  (Dy/Dxytheo), "%.3f" %  (Dz/Dztheo))
             FSDXFit=4*(p1Lo+BeadRad)/p2Xo**2; FSDXMod=4*(pLo+BeadRad)/p2Xo**2
             FSDYFit=4*(p1Lo+BeadRad)/p2Yo**2; FSDYMod=4*(pLo+BeadRad)/p2Yo**2    
  
