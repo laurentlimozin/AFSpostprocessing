@@ -37,9 +37,10 @@ Created on Sun Sep 29 19:33:24 2019
                 Take into account the NoOpen cases in the survival curve
 20201025 v3.91  Revised NoOpen/NoClose cases with introduction of a threshold MiddleOpenClose=900nm
                 Some discrepancy for step_detectON=0 or 1 (which may depend on windowsize_detect and NZavg)
-20201204 v4.0   Full revision of code; All graphic functions shifted to AFS_JDNA_Graphs
+20201206 v4.0   Full revision of code; All graphic functions shifted to AFS_JDNA_Graphs
                 Adapt to last version of nptdms package
-                Option of custom interval for anchor point and spectrum: range_anchorpoint=(0,100) range_spectrum=(1000, 2000)
+                Option of custom interval for anchor point and power spectrum (cf graph 'Various intervals')
+                    range_anchorpoint=(start,stop) range_spectrum=(start,stop) and boolean Select_range_spectrum
 
 """""
 
@@ -72,12 +73,11 @@ b=[23]               # test beads  b=[6, 8, 21, 41, 46, 58, 73, 91]     #b=[58, 
 #RangeNZlavg=[20,40,60, 80, 100, 120, 140, 160, 200, 240, 280, 320, 400, 480, 560, 640, 720, 800, 900, 1000]
 RangeNZlavg=[400]       # size of moving average for smoothing z before anchor point determination
 
-# initialiation for coordinate reading
+# initialiation for various intervals
 nbead=len(b); fname=[""]*nbead; start=np.zeros(nbead, dtype=int); stop=np.zeros(nbead, dtype=int); load=np.zeros(nbead, dtype=int)
 #for nf in range(nbead): fname[nf] = tdmsfilename; start[nf]=15000; stop[nf]=1600000; load[nf]=nf==0  # stop[nf]=1600000
-for nf in range(nbead): fname[nf] = tdmsfilename; start[nf]=0.*60*1000/18; stop[nf]=175*60*1000/18; load[nf]=nf==0  # stop[nf]=1600000
-range_anchorpoint=(0,10000)
-range_spectrum=(1000, 2000); Select_range_spectrum=True
+for nf in range(nbead): fname[nf] = tdmsfilename; start[nf]=30*60*1000/18; stop[nf]=175*60*1000/18; load[nf]=nf==0  # stop[nf]=1600000
+range_anchorpoint=(0,int(180000/18)); range_spectrum=(int(0.9e6/18), int(1.1e6/18)); Select_range_spectrum=False
 
 ##========================= ========================= =========================
 # General settings
@@ -96,11 +96,11 @@ fmin=0.1; fmax=15.   # frequency range for spectrum fit (Hz)
 p1Lo0=1000; p1Lc0=800; p1Ll0=500; p1Zl0=500  # guess for histogram fit
 
 # Print and display options
-pprint=True; # printing detailed infos in console window
+pprint=False; # printing detailed infos in console window
 SaveGraph=True; OutFormat=".jpg" ; CloseAfterSave=False # alternative ".jpg" or ".pdf" 
 GraphTdms=False  # graph of frame rate and force data (duration and amplitude of 2 steps)
 GraphDhisto=False; GraphTupdown=False; GraphTZ_Power=True
-HistoZ=True; GraphXYZ=True # characteristics of trajectory of the selected beads
+HistoZ=True; GraphXYZ=False # characteristics of trajectory of the selected beads
 GraphXYall=False; iminXY=0; imaxXY=0 # display xy trajectories with number on a single graph
 DisplaySpectrum=True
 DisplayCloseOpen=True
@@ -231,7 +231,7 @@ def FindJumps(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Plow, TEhigh, tol, dzjump,
     ISup=(NE=='SigGen.Power (%)')*(Phigh*(1-tol)<DE)*(DE<Phigh*(1+tol))
     ISdown=(NE=='SigGen.Power (%)')*(Plow*(1-tol)<DE)*(DE<Plow*(1+tol))
 #    ISdown=(NE=='SigGen.Power (%)')*(DE<=Plow*(1+tol))
-    Tup=(TE[ISup]).astype(float); Dup=DE[ISup]; nup=len(Tup); print('Nb steps UP:', nup )
+    Tup=(TE[ISup]).astype(float); Dup=DE[ISup]; nup=len(Tup); print('Nb steps UP:', nup, end='  ' )
     Tdown=(TE[ISdown]).astype(float); Ddown=DE[ISdown]; ndown=len(Tdown); print('Nb steps DOWN:', ndown )
     if ndown==nup+1 and Tdown[0]<Tup[0]:
         Tdown=Tdown[1:ndown]; Ddown=Ddown[1:ndown]; ndown=len(Tdown); print('remove first steps DOWN:', ndown  )
@@ -269,7 +269,7 @@ def FindJumps(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Plow, TEhigh, tol, dzjump,
             Zs1avg=np.convolve(Zs1, np.ones((NZavg,))/NZavg, mode=mode)
             ax1.scatter(T1, Zs1, c='r', alpha=0.01)
             ax1.plot(T1, Zs1avg, c='k', alpha=0.5)
-        print('-----------------------------------------------') 
+        if pprint: print('-----------------------------------------------') 
         for j in range(j0+1,j1):
             if Zsavg[j]>Zuphigh[i]+dzjump:
                 Tupjump[i]=T[j]; Zupjump[i]=np.amin(Zs[range(j+NZavg,j+2*NZavg)]); countOpen+=1; State='Open '; Count=countOpen
@@ -384,7 +384,7 @@ def Spectrum(xx, axis, p1Zo, fs, label, display, fmin, fmax, axtable=None):
         for axbis in wax: axbis.plot(ft, FitPxxt_spec, c='r', alpha=0.8)
         if SaveGraph: plt.savefig(path1+OutputFolder+figname+OutFormat)
         if CloseAfterSave: plt.close()
-    print('Spectrum'+label, ' k (pN/nm)=',"%.3f" %  (pEq[0]),' D (nm²/s)=',"%.3f" %  (pEq[1]))
+    print('Spectrum'+label, ' k (pN/nm)=',"%.5f" %  (pEq[0]),' D (nm²/s)=',"%.3f" %  (pEq[1]))
     return pEq[0], pEq[1], eEq[0], eEq[1], friction
 
 def survival(Tupjump_Tuphigh, TEhigh, countNoOpen, shift, refname, color):
@@ -447,7 +447,7 @@ color=iter(cm.rainbow(np.linspace(0, 1, 4*nbead*len(RangeNZlavg))))
 if nbead>1: figAllSpec, axAllSpec = plt.subplots(nbead, 3, num='figAllSpec', figsize=(6, 2*nbead), dpi=100)
 
 for ibead in range(nbead):        ## Loop on test beads
-    print('=============================================================')
+    print('======================BEAD ', b[ibead] ,' ===========================')
     print('NZavg=',NZavg, 'dzjump=', dzjump, 'tol=',tol, 'NZrefavg=',NZrefavg)
     if loaddata and load[ibead]: print('Loading data', fname[ibead]); tdms_file = TdmsFile.open(path1+fname[ibead])  # alternative TdmsFile.read(path1+fname[ibead])
     if loaddata and not load[ibead]: print('Data already loaded', fname[ibead])
@@ -480,15 +480,15 @@ for ibead in range(nbead):        ## Loop on test beads
         ax.scatter(T0, P0, marker='.', c='b', alpha=0.5)
  
     # make sure that chosen time interval does not start or stop at high power        
-    print('Power at start', start[ibead],':', P0[start[ibead]])
-    print('Power at stop:', stop[ibead],':', P0[stop[ibead]])
+    print('Power at    start', start[ibead],':', P0[start[ibead]], end=' ')
+    print('Power at    stop:', stop[ibead],':', P0[stop[ibead]])
     if P0[start[ibead]]>0.1:
         wstart=10*np.arange(1000)+start[ibead]; wPstart=P0[wstart]
         i0=np.argmin(wPstart); start[ibead]= wstart[i0+5]
     if P0[stop[ibead]]>0.1:
         wstop=10*np.arange(1000)+stop[ibead]; wPstop=P0[wstop]
         i0=np.argmin(wPstop); stop[ibead]= wstop[i0+5]
-    print('Power at new start', start[ibead],':', P0[start[ibead]])
+    print('Power at new start', start[ibead],':', P0[start[ibead]], end=' ')
     print('Power at new stop:', stop[ibead],':', P0[stop[ibead]])
 
     print('Tracks shortening from frame', start[ibead], 'to ',stop[ibead])
@@ -539,7 +539,7 @@ for ibead in range(nbead):        ## Loop on test beads
         
     p1Lo=p1Lo0; p1Lc=p1Lc0; p1Ll=p1Ll0; p1Zl=p1Zl0  # initialization of gaussian center for fit guess
     for NZlavg in RangeNZlavg:      # test loop for various choices of NZlavg
-        print('******* NZlavg=', NZlavg, '*******')
+        if len(RangeNZlavg)>1: print('=============== NZlavg=', NZlavg, '===============')
         Zcavg=np.convolve(Zc, np.ones((NZlavg,))/NZlavg, mode=mode); dZ=Zc-Zcavg
         Zecavg=np.convolve(Zec, np.ones((NZlavg,))/NZlavg, mode=mode); dZe=Zec-Zecavg
          
@@ -551,33 +551,34 @@ for ibead in range(nbead):        ## Loop on test beads
         Zec0custom=Zecavg[mask_anchor]; Xec0custom=Xec[mask_anchor]; Yec0custom=Yec[mask_anchor]; dZe0custom=dZe[mask_anchor]
 
         Zcavg=np.convolve(Zc, np.ones((NZavg,))/NZavg, mode=mode)
-        plt.figure('Populations', figsize=(6,6), dpi=100); ax = plt.gca()
-        ax.plot(T, Zcavg, c='m', alpha=0.5, label='Zcavg')
-        ax.scatter(T[indhigh], np.median(Zch)*np.ones(len(T))[indhigh], marker='.', s=3, alpha=0.5, label='indhigh')
-        ax.scatter(T[indlow], np.median(Zcl)*np.ones(len(T))[indlow], marker='.', s=3, alpha=0.5, label='indlow')
-        ax.scatter(T[ind0force], np.median(Zc0)*np.ones(len(T))[ind0force], marker='.', s=3, alpha=0.5, label='ind0force')
-        ax.scatter(T0[indeforce0], np.median(Zec0)*np.ones(len(T0))[indeforce0], marker='.', s=3, alpha=0.5, label='indeforce0')
+        plt.figure('Various intervals', figsize=(6,6), dpi=100); ax = plt.gca()
+        ax.plot(T, Zcavg, c='k', alpha=0.1, label='Zcavg')
+        ax.scatter(T[indhigh], np.median(Zch)*np.ones(len(T))[indhigh], marker='.', s=3, alpha=0.5, label='high power')
+        ax.scatter(T[indlow], np.median(Zcl)*np.ones(len(T))[indlow], marker='.', s=3, alpha=0.5, label='low power')
+        ax.scatter(T[ind0force], np.median(Zc0)*np.ones(len(T))[ind0force], marker='.', s=3, alpha=0.5, label='0 force')
+        ax.scatter(T0[indeforce0], np.median(Zec0)*np.ones(len(T0))[indeforce0], marker='.', s=3, alpha=0.5, label='0 force full range')
         ax.scatter(T0[mask_anchor], np.median(Zec0custom)*np.ones(len(T0))[mask_anchor], marker='.', s=8, alpha=0.5, label='mask_anchor')
         if Select_range_spectrum: ax.scatter(T0[mask_spectrum], np.zeros(len(T0))[mask_spectrum], marker='.', s=8, alpha=0.5, label='mask_spectrum')
-        ax.legend(fontsize=10)
+        ax.legend(fontsize=10, markerscale=3)
 
         indstart=(T0<start[ibead]); Z0start=Z0c[indstart]
         Nl=len(Zc[indlow]); Nh=len(Zc[indhigh]); N0=len(Zc[ind0force]); Ntot=len(Zc)
         print('States Populations: low=', Nl, ' high=', Nh, ' 0force=', N0, ' total=', Ntot)        
         print('States Fractions: low=',"%.3f" %  (Nl/Ntot), ' high=',"%.3f" %  (Nh/Ntot), ' 0force=',"%.3f" %  (N0/Ntot), 'total=',"%.3f" %  ((Nl+Nh+N0)/Ntot))        
         for AnchorPointState in AnchorPointStateList:      # ['low force','0 force','custom']     
-            print('Anchor Point Reference Power:', AnchorPointState)
+            print('=============== Anchor Point Reference:', AnchorPointState, end=' ')
             if AnchorPointState=='None':
                 print('No anchoring point'); Zs=Zc; Xs=Xc; Ys=Yc
             else:
                 if AnchorPointState=='low force':
-                    Zc_=Zcl; Xc_=Xcl; Yc_=Ycl
+                    Zc_=Zcl; Xc_=Xcl; Yc_=Ycl; print("") 
                 elif AnchorPointState=='0 force':
-                    NZlavg+=10
+                    NZlavg+=10; print("") 
                     Zc_=Zc0; Xc_=Xc0; Yc_=Yc0   
                     Zc_=Zec0; Xc_=Xec0; Yc_=Yec0
                 elif AnchorPointState=='custom':
                     Zc_=Zec0custom; Xc_=Xec0custom; Yc_=Yec0custom
+                    print(range_anchorpoint[0], range_anchorpoint[1])
                 Zc_sort=np.sort(Zc_)       #     cleanedZclsort = [x for x in Zclsort if str(x) != 'nan']
                 if len(Zc_sort)>0: Za=np.median(Zc_sort[np.arange(sample)])  # Za=np.amin(Zcl) #-BeadRad
                 else:
@@ -587,7 +588,7 @@ for ibead in range(nbead):        ## Loop on test beads
                 Xa=np.median(Xc_); Ya=np.median(Yc_)     
                 CA=np.sqrt((Xc-Xa)**2+(Yc-Ya)**2+(Zc-Za)**2)
                 Zs=Zc-Za; Xs=Xc-Xa; Ys=Yc-Ya
-                Zs0=Zec-Za; Xs0=Xec-Xa; Ys0=Yec-Ya
+                Zs00=Zec-Za; Xs00=Xec-Xa; Ys00=Yec-Ya
             Xsl=Xs[indlow]; Ysl=Ys[indlow]; Zsl=Zs[indlow]; Tl=T[indlow]; MinLUTl=MinLUT[indlow]
             Xsh=Xs[indhigh]; Ysh=Ys[indhigh] ; Zsh=Zs[indhigh]; Th=T[indhigh]; MinLUTh=MinLUT[indhigh]
             Xs0=Ys[ind0force]; Ys0=Ys[ind0force]; Zs0=Zs[ind0force]       
@@ -604,7 +605,7 @@ for ibead in range(nbead):        ## Loop on test beads
                 AFSG.SingleTrace(refname, tdms_track, -2, sampleGraph, Xs, Ys, Zs, T, MinLUT, SaveGraph, path1+OutputFolder, OutFormat )
                 AFSG.MakeGraphXY(T, Length, T, Zs, 0, T[-1], 0, 1200, 'Length', 'Zs', refname+'Length', SaveGraph, path1+OutputFolder, OutFormat)
               
-            print('Opening analysis********')       
+            print('=============== Opening analysis ===============')       
             Zsavg=np.convolve(Zs, np.ones((NZavg,))/NZavg, mode=mode)
             DeltaCOFit=0
             for i in [0]:         #  [0,1] first pass dzjump, 2nd pass DeltaCOFit
@@ -623,15 +624,11 @@ for ibead in range(nbead):        ## Loop on test beads
                     indopen=indopen+(T>Tupjump[nj])*(T<Tupdown[nj])*indhigh
                 Zsclosed=Zs[indclosed]; Tclosed=T[indclosed]; Xsclosed=Xs[indclosed]; Ysclosed=Ys[indclosed]; Lengthclosed=Length[indclosed]
                 Zsopen=Zs[indopen]; Topen=T[indopen]; Xsopen=Xs[indopen]; Ysopen=Ys[indopen]; Lengthopen=Length[indopen]
-                if Select_range_spectrum:
-                    Zsopen_=Zs[indopen]; Xsopen_=Xsopen;  Ysopen_=Ysopen
-                else:
-                    Zsopen_=Zsopen; Xsopen_=Xsopen;  Ysopen_=Ysopen
                 Nc=len(Zsclosed); No=len(Zsopen)
                 print('States Population: close=', Nc, ' open=', No, ' high=', Nh)
                 print('States Fractions: close=',"%.3f" %  (Nc/Nh), ' open=', "%.3f" %  (No/Nh), ' (Nc+No)/Nh=', "%.3f" %  ((Nc+No)/Nh))
     
-                print('Gaussian fits ********')
+                print('=============== Gaussian fits ===============')
                 if i==0:
                     p0Lo, p1Lo, p2Lo, pLo = FitHistoGaussian(Lengthopen, 'Lengthopen nm ', DisplayGaussianFits , 100 )
                     p0Lc, p1Lc, p2Lc, pLc = FitHistoGaussian(Lengthclosed, 'Lengthclosed nm ', DisplayGaussianFits, 100 )
@@ -648,7 +645,12 @@ for ibead in range(nbead):        ## Loop on test beads
             
             MakeHistoZ(Zsclosed, Zsopen, 'Zsclosed', 'Zsopen', -100, 1200, refname+'ZsclosedZsopen')
 
-            print('Power Spectra fits********')
+            print('=============== Power Spectra fits ===============')
+            if Select_range_spectrum:
+                Zsopen_=Zs00[mask_spectrum]; Xsopen_=Xs00[mask_spectrum];  Ysopen_=Ys00[mask_spectrum]
+                print('Select_range_spectrum', range_spectrum[0], range_spectrum[1])
+            else:
+                Zsopen_=Zs[indopen]; Xsopen_=Xsopen;  Ysopen_=Ysopen
             if nbead>1: axtable0=axAllSpec[ibead,0]; axtable1=axAllSpec[ibead,1]; axtable2=axAllSpec[ibead,2]
             else: axtable0=None; axtable1=None; axtable2=None
             kx, Dx, dkx, dDx, frictionXY = Spectrum(Xsopen_, 'XY', p1Zo, fs,'XsopenRef'+AnchorPointState, DisplaySpectrum, fmin, fmax, axtable=axtable0) 
@@ -708,20 +710,20 @@ nFig1=len(listFig1); ax1=[]; figname1=[]; color=iter(cm.rainbow(np.linspace(0, 1
 nFig2=len(listFig2); ax2=[]; figname2=[]
 if DisplayplotvariableNZlavg:
     for i in range(nFig1): figname1.append( plt.figure(listFig1[i], figsize=(6,6), dpi=100) ); ax1.append(plt.gca())
-for i in range(nFig2): figname2.append( plt.figure(listFig2[i], figsize=(6,6), dpi=100) ); ax2.append(plt.gca())
+    for i in range(nFig2): figname2.append( plt.figure(listFig2[i], figsize=(6,6), dpi=100) ); ax2.append(plt.gca())
 
-for ib in b:
-    c=[next(color),]
-    dfT=dfTotal.where(dfTotal['bead']==ib)
-    DeltaCOFit=dfT['p1Lo_nm']-dfT['p1Lc_nm']; DeltaCOMod=dfT['pLo_nm']-dfT['pLc_nm']
+    for ib in b:
+        c=[next(color),]
+        dfT=dfTotal.where(dfTotal['bead']==ib)
+        DeltaCOFit=dfT['p1Lo_nm']-dfT['p1Lc_nm']; DeltaCOMod=dfT['pLo_nm']-dfT['pLc_nm']
+    
+    AFSG.MakeDisplayplotvariableNZlavg(DisplayplotvariableNZlavg, ax1, ax2, dfT, c, ib, DeltaCOFit, DeltaCOMod)
+    
+    for axi in [ax2[2], ax2[0], ax2[1]]: axi.plot(np.linspace(0, 2, 10), np.linspace(0, 2, 10), c='k', alpha=0.5, label=' y=x')    
 
-AFSG.MakeDisplayplotvariableNZlavg(DisplayplotvariableNZlavg, ax1, ax2, dfT, c, ib, DeltaCOFit, DeltaCOMod)
-
-for axi in [ax2[2], ax2[0], ax2[1]]: axi.plot(np.linspace(0, 2, 10), np.linspace(0, 2, 10), c='k', alpha=0.5, label=' y=x')    
-if DisplayplotvariableNZlavg:
     for i in range(nFig1):
         ax1[i].legend(fontsize=6)
         if SaveGraph: plt.figure(listFig1[i]); plt.savefig(path1+OutputFolder+fname[0]+listFig1[i]+OutFormat)
-for i in range(nFig2):
-    ax2[i].legend(fontsize=6)
-    if SaveGraph: plt.figure(listFig2[i]); plt.savefig(path1+OutputFolder+fname[0]+listFig2[i]+OutFormat)
+    for i in range(nFig2):
+        ax2[i].legend(fontsize=6)
+        if SaveGraph: plt.figure(listFig2[i]); plt.savefig(path1+OutputFolder+fname[0]+listFig2[i]+OutFormat)
