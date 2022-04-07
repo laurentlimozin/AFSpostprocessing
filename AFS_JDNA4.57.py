@@ -962,6 +962,7 @@ for ibead in range(nbead):        ## Loop on test beads
         
             # Jim the calculation of the length and pulling angle from the center of the contour    
       #      (X0ca,Y0ca) = contourdataXY0XYsh[0][2]
+            (X0ca,Y0ca) = contourdataXYslXYsh[0][2]
             if manual_anchor_point:
                 (Xca,Yca) = coordinates_anchor_point
                 print("Manual Anchor point: ", (Xca,Yca))
