@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def MakeGraphXYall(d0, imax, n, refrms, name, outname, OutFormat, SaveGraph, corr=False, Xr0avg=None, Yr0avg=None):   
+def MakeGraphXYall(d0, imax, n, refrms, name, outname,  OutFormat, SaveGraph, corr=False, Xr0avg=None, Yr0avg=None):   
 # Displays all XY traj with number and SD on the same graph
     if corr: name=name+" Corr"
     figname='XYall_'+name
@@ -32,6 +32,7 @@ def MakeGraphXYall(d0, imax, n, refrms, name, outname, OutFormat, SaveGraph, cor
         plt.text(xx[-1], yy[-1], lab, fontsize=6)
     ax.axis([xmin, xmax, ymin, ymax])
     if corr: ax.axis([xmin-Xr0avg.mean(), xmax-Xr0avg.mean(), ymin-Yr0avg.mean(), ymax-Yr0avg.mean()])
+    print(outname,figname,OutFormat)
     if SaveGraph: plt.savefig(outname+figname+OutFormat)
 
 def Plot3D(x,y,z,n, refname, outname, OutFormat, SaveGraph):    # 3D plot
