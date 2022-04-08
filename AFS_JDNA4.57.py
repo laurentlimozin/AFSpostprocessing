@@ -102,6 +102,7 @@ Created on Sun Sep 29 19:33:24 2019
 
 20220314 v4.55 Exports raw spectra for calibration mode
 20220314 v4.56 Exports raw spectra for calibration mode and cyclic mode
+20220408 v4.57 Error management in fits. Git push
 """""
 
 import numpy as np
@@ -168,6 +169,8 @@ tdmsfilename="20200825-114338"
 tdmsfilename="20210929-005129"
 #tdmsfilename="20200903-231501"
 tdmsfilename="20211008-205604"
+tdmsfilename="20211001-184602"
+#tdmsfilename="20211007-130743"
 
 OutputFolder='Outputtest/'
 if not os.path.exists(path1+OutputFolder): os.makedirs(path1+OutputFolder)
@@ -252,6 +255,7 @@ if loadparameter and os.path.isfile(path1+param_name):
         if t == 'l': exec("%s = '%s'.split()" % (p,v))
         if t == 't': exec("%s = tuple(%s)" % (p,v))
      #   exec("print(%s , type(%s))" %(p,p))
+Select_range_spectrum = Select_range_spectrum == 'True'
 CalculateSurvival = CalculateSurvival == 'True'   # 20211025 transforms strings in booleans
 selfreference = selfreference == 'True'
 forcecalib = forcecalib == 'True'
@@ -520,7 +524,8 @@ def FindJumps(T, Zs, Zsavg, NZavg, TE, DE, NE, Phigh, Plow, TEhigh, tol, dzjump,
         else:
             Zuphigh[i]=np.mean(Zs[range(j0,j0+int(TEhigh/1000*fs))])
             if pprint: print(i, 'multiple steps. z=', Zuphigh[i],'of size:', step_sizes)
-            if Zuphigh[i]>=MiddleOpenClose: Tupjump_[i]=Tup[i]-10000; Zupjump_[i]=Zuphigh[i]+200; countNoClose_+=1; State_='NoClo'; Count_=countNoClose            
+       #     if Zuphigh[i]>=MiddleOpenClose: Tupjump_[i]=Tup[i]-10000; Zupjump_[i]=Zuphigh[i]+200; countNoClose_+=1; State_='NoClo'; Count_=countNoClose            
+            if Zuphigh[i]>=MiddleOpenClose: Tupjump_[i]=Tup[i]; Zupjump_[i]=Zuphigh[i]+200; countNoClose_+=1; State_='NoClo'; Count_=countNoClose            
             if Zuphigh[i]<MiddleOpenClose: Tupjump_[i]=TEhigh+Tup[i]; Zupjump_[i]=Zuphigh[i]; countNoOpen_+=1; State_='NoOpen'; Count_=countNoOpen
 #        if pprintstep: print(i,j, int(Tupjump_[i]), int(Zupjump_[i]),'Gaus1d', State_, Count_, len(steps_dg1),
  #                        int((Tupjump_[i]-Tup[i])/1000), int(Zupjump_[i]-Zupmid[i]))
@@ -568,7 +573,19 @@ def FitHistoGaussian(Length, label, display, delta):
     indxfit=np.abs(Hx-xHymax)<delta
     Hxt=Hx[indxfit]; Hyt=Hy[indxfit[1:]]
     if len(Hxt)>len(Hyt): Hxt=Hxt[1:]
-    pEq, pcovEq=curve_fit(gauss_function, Hxt, Hyt, p0=[1., xHymax,20])
+    while True:
+         try:
+             pEq, pcovEq=curve_fit(gauss_function, Hxt, Hyt, p0=[1., xHymax,20])
+             break
+         except RuntimeError:
+             print("No convergence"); pEq=[0., 0., 1.]
+             break
+         except TypeError:
+             print("Improper input"); pEq=[0., 0., 1.]
+             break
+         except ValueError:
+             print("Data contains Nan"); pEq=[0., 0., 1.]
+             break            
     pEq[2]=np.abs(pEq[2])
     FitHy=gauss_function(Hxt, pEq[0], pEq[1], pEq[2])
     print(label+'Mod',xHymax, '  Gaussian fit: Amp=', "%.3f" % pEq[0], 'Avg=', "%.3f" % pEq[1] , 'SD=', "%.3f" % abs(pEq[2]))
@@ -659,7 +676,10 @@ def survival(Tupjump_Tuphigh, TEhigh, countNoOpen, shift, refname, color, export
             print(pEq0[0], pcovEq0[0][0])
             break
         except RuntimeError:
-            print("No convergence"); pEq0=[0.]
+            print("No convergence"); pEq0=[1.]; pcovEq0=[[0]]
+            break
+        except ValueError:
+            print("Empty data"); pEq0=[1.]; pcovEq0=[[0]]
             break
     y2_fit0=FitExp0(x2, pEq0[0])
     while True:
@@ -668,7 +688,10 @@ def survival(Tupjump_Tuphigh, TEhigh, countNoOpen, shift, refname, color, export
             pEq, pcovEq=curve_fit(FitExp1, x2, y2, p0=initialguessEq)
             break
         except RuntimeError:
-            print("No convergence"); pEq=[0.,0.]
+            print("No convergence"); pEq=[1.,0.]; pcovEq=[[0,0],[0,0]]
+            break
+        except ValueError:
+            print("Empty data"); pEq=[1.,0.]; pcovEq=[[0,0],[0,0]]
             break
     y2_fit=FitExp1(x2, pEq[0], pEq[1])
     if DisplaySurvival:
@@ -726,13 +749,14 @@ for ibead in range(nbead):        ## Loop on test beads
     
     # Clean outliers
     if CleanOutliers:
-        mm=0.5; print('Clean outliers nan or +/-', mm)
+        mm=0.5; mmabs=2000; print('Clean outliers nan or +/-', mm)
         i0 = np.isnan(X0) + np.isnan(Y0) + np.isnan(Z0) 
         mX0 = np.median(X0[~i0]);  X0[i0] = mX0
         mY0 = np.median(Y0[~i0]);  Y0[i0] = mY0
         mZ0 = np.median(Z0[~i0]);  Z0[i0] = mZ0
         if pprint: print('median X0=', mX0, 'median Y0=', mY0, 'median Z0=', mZ0 )
-        j0 = (X0>(1+mm)*mX0) + (X0<(1-mm)*mX0) + (Y0>(1+mm)*mY0) + (Y0<(1-mm)*mY0) + (Z0>(1+mm)*mZ0) + (Z0<(1-mm)*mZ0)
+    #    j0 = (X0>(1+mm)*mX0) + (X0<(1-mm)*mX0) + (Y0>(1+mm)*mY0) + (Y0<(1-mm)*mY0) + (Z0>(1+mm)*mZ0) + (Z0<(1-mm)*mZ0)
+        j0 = (X0>mX0+mmabs) + (X0<mX0-mmabs) + (Y0>mY0+mmabs) + (Y0<mY0-mmabs) + (Z0>mZ0+mmabs) + (Z0<mZ0-mmabs)
         X0[j0] = mX0; Y0[j0] = mY0; Z0[j0] = mZ0; 
     #    m0 = np.median(X0[~i0]);  X0[i0] = m0*(1+.01*np.random.rand(len(X0[i0]))); X0[ (X0>(1+mm)*m0) | (X0<(1-mm)*m0) ] = m0
         m0 = np.median(MinLUT0[~i0]);  MinLUT0[i0] = m0 ; MinLUT0[ (MinLUT0>(1+mm)*m0) | (MinLUT0<(1-mm)*m0) ] = m0
@@ -916,9 +940,13 @@ for ibead in range(nbead):        ## Loop on test beads
                 elif AnchorPointState=='0_force':
                     NZlavg+=10; print("") 
                     Zc_=Zc0; Xc_=Xc0; Yc_=Yc0   
-                    Zc_=Zec0; Xc_=Xec0; Yc_=Yec0
+         #           Zc_=Zec0; Xc_=Xec0; Yc_=Yec0
                 elif AnchorPointState=='custom':
                     Zc_=Zec0custom; Xc_=Xec0custom; Yc_=Yec0custom
+                    print(" interval (min)=", range_anchorpoint_min[0], range_anchorpoint_min[1])
+                elif AnchorPointState=='0_force_custom':
+                    mask_anchor0_0_force = mask_anchor0 * indeforce0
+                    Zc_=Zecavg[mask_anchor0_0_force]; Xc_=Xec[mask_anchor0_0_force]; Yc_=Yec[mask_anchor0_0_force]
                     print(" interval (min)=", range_anchorpoint_min[0], range_anchorpoint_min[1])
                 Zc_sort=np.sort(Zc_)       #     cleanedZclsort = [x for x in Zclsort if str(x) != 'nan']
                 if len(Zc_sort)>0: Za=np.median(Zc_sort[np.arange(sample)])  # Za=np.amin(Zcl) #-BeadRad
@@ -950,7 +978,7 @@ for ibead in range(nbead):        ## Loop on test beads
             if HistoZ: MakeHistoZ(Lengthh, Lengthl, 'Lengthh', 'Lengthl', -500, MaxZHistoPlot, refname+'LengthhLengthl')
             if GraphXYZ:
                 contourdataXYslXYsh = AFSG.MakeGraphXY(Xsl, Ysl, Xsh, Ysh, -dX, dX, -dY, dY, 'XYl', 'XYh', refname+'XYslXYsh', SaveGraph, path1+OutputFolder, OutFormat, levels=10)
-#                contourdataXY0XYsh = AFSG.MakeGraphXY(Xec0, Yec0, [], [], Xa-dX, Xa+dX, Ya-dY, Ya+dY, 'XY0', '__', refname+'XY0__', SaveGraph, path1+OutputFolder, OutFormat, levels=10)
+                contourdataXY0XYsh = AFSG.MakeGraphXY(Xec0, Yec0, [], [], Xa-dX, Xa+dX, Ya-dY, Ya+dY, 'XY0', '__', refname+'XY0__', SaveGraph, path1+OutputFolder, OutFormat, levels=10)
                     # Jim Plot XY fluctuation of selected beads during 0 force without anchoring correction 
                 contourdataXYoriginlXYsh = AFSG.MakeGraphXY(Xol, Yol, [], [], Xa-dX, Xa+dX, Ya-dY, Ya+dY, 'XYlow', '__', refname+'XYoriginl__', SaveGraph, path1+OutputFolder, OutFormat, levels=20)
                     # Jim Plot XY fluctuation of selected beads during low power without anchoring correction 
@@ -961,12 +989,12 @@ for ibead in range(nbead):        ## Loop on test beads
                 AFSG.MakeGraphXY(T, Length, T, Zs, 0, T[-1], 0, MaxZHistoPlot, 'Length', 'Zs', refname+'Length', SaveGraph, path1+OutputFolder, OutFormat, contour=False)
         
             # Jim the calculation of the length and pulling angle from the center of the contour    
-      #      (X0ca,Y0ca) = contourdataXY0XYsh[0][2]
-            (X0ca,Y0ca) = contourdataXYslXYsh[0][2]
+     #       contourdataXY0XYsh = contourdataXYslXYsh
+            (X0ca,Y0ca) = contourdataXY0XYsh[0][2]
             if manual_anchor_point:
                 (Xca,Yca) = coordinates_anchor_point
                 print("Manual Anchor point: ", (Xca,Yca))
-            elif AnchorPointState=='custom':
+            elif AnchorPointState=='custom' or AnchorPointState=='0_force_custom':
                 contourdataXYcustom = AFSG.MakeGraphXY(Xec0custom, Yec0custom, [], [], -dX, dX, -dY, dY, 'XYcustom', '__', refname+'XYcustom__', SaveGraph, path1+OutputFolder, OutFormat, levels=20)
                 (Xca,Yca) = contourdataXYcustom[0][2]
                 print("Custom interval contour Anchor point: ", (Xca,Yca))
