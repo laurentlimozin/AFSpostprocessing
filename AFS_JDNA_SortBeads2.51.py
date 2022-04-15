@@ -500,13 +500,15 @@ def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy, goldbead=False):   # D, 
         else:
             print(' missing file'); listfile += [0]
     def TotalFit(param, x=None, aax=None):
+        inb0 = -1
         for inb in range(npower):
             if listfile[inb] == 1:
+                inb0+=1
                 mi = FitSpectrumGen(datax['frt'+str(inb)], param['k'+str(inb)], param['D'])
                 ri_ = datax['Pxy'+str(inb)] - mi
                 ri_ = ( datax['Pxy'+str(inb)] - mi ) / np.max(datax['Pxy'+str(inb)])
-                if inb==0: ri = ri_
-                if inb!=0: ri = np.concatenate((ri, ri_))
+                if inb0==0: ri = ri_
+                if inb0!=0: ri = np.concatenate((ri, ri_))
         return ri
     if sum(listfile)>0:
         out = minimize(TotalFit, params)#, nan_policy='omit')#, kws={"wt": wt, "df": df})
@@ -592,11 +594,9 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
             else:
                 power = dfstage['% High power'][inb]
                 suffixe = f'{power:g}'+'%.csv'
-            fname_spectraX = prefixe +'_ExportSpectrum_XsopenRefcustom_'+ suffixe
-            fname_spectraY = prefixe +'_ExportSpectrum_YsopenRefcustom_'+ suffixe
             fname_spectrarawXY = prefixe +'_rawXYspectrum_'+ suffixe
-            start_fname_spectraX = prefixe +'_ExportSpectrum_Xsopen'
-            start_fname_spectraY = prefixe +'_ExportSpectrum_Ysopen'
+            start_fname_spectraX = prefixe +'_ExportSpectrum_XsopenRef'
+            start_fname_spectraY = prefixe +'_ExportSpectrum_YsopenRef'
             fname_spectraresults = prefixe +'_FitsResults_'+ suffixe
             print(' Spectrum file', fname_spectrarawXY)
             ax3x = axall3x[iID//ncol2, iID%ncol2]
@@ -604,18 +604,20 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
             fullfilename = inputpath0 + folder_spectra + fname_spectrarawXY
             IDshow=13
             if os.path.isfile(fullfilename):
-      #          dfx_name1 = [i for i in files if (start_fname_spectraX in i) and (suffixe in i)][0]; print(dfx_name1)
-                # dfx = pd.read_csv(inputpath0 + folder_spectra + dfx_name, index_col=False)  # 
-                dfx = pd.read_csv(inputpath0 + folder_spectra + fname_spectraX, index_col=False)  # print(fname_spectraX)
-      #          dfy_name1 = [i for i in files if (start_fname_spectraY in i) and (suffixe in i)][0]; print(dfy_name1)
-                # dfy = pd.read_csv(inputpath0 + folder_spectra + dfy_name, index_col=False)  # 
-                dfy = pd.read_csv(inputpath0 + folder_spectra + fname_spectraY, index_col=False)  # print(fname_spectraY)
+                fnameXa = inputpath0 + folder_spectra + start_fname_spectraX + "custom_" + suffixe
+                fnameYa = inputpath0 + folder_spectra + start_fname_spectraY + "custom_" + suffixe
+                fnameXb = inputpath0 + folder_spectra + start_fname_spectraX + "0_force_" + suffixe
+                fnameYb = inputpath0 + folder_spectra + start_fname_spectraY + "0_force_" + suffixe
+                if os.path.isfile(fnameXa):
+                    dfx = pd.read_csv(fnameXa, index_col=False); dfy = pd.read_csv(fnameYa, index_col=False)
+                if os.path.isfile(fnameXb):
+                    dfx = pd.read_csv(fnameXb, index_col=False); dfy = pd.read_csv(fnameYb, index_col=False) 
                 dfraw = pd.read_csv(inputpath0 + folder_spectra + fname_spectrarawXY, index_col=False) #print(fname_spectrarawXY)
-                dfres = pd.read_csv(inputpath0 + folder_spectra + fname_spectraresults, index_col=False)
-         #        ax3x.loglog(dfx['Xfbins_Hz'], dfx['Pbins'], 'k-', marker=next(poolmarker2x), ms=6 , c=col, label=str(power)+'%', alpha=0.3)
-         #        ax3y.loglog(dfy['Xfbins_Hz'], dfy['Pbins'], 'k-', marker=next(poolmarker2y), ms=6 , c=col, label=str(power)+'%', alpha=0.3)
-         # #       ax3x.loglog(dfraw['fx'], dfraw['Pxx_specx'], 'k-', marker=next(poolmarker2x), ms=6 , c=col, label=str(power)+'%', alpha=0.3)
-         # #       ax3y.loglog(dfraw['fy'], dfraw['Pxx_specy'], 'k-', marker=next(poolmarker2x), ms=6 , c=col, label=str(power)+'%', alpha=0.3)
+                fnameres = inputpath0 + folder_spectra + fname_spectraresults
+                if os.path.isfile(fnameres):
+                    dfres = pd.read_csv(fnameres, index_col=False)
+                else:
+                    dfres = pd.DataFrame(data={'Cp1Lo': [0], 'p1Lo': [0], 'Cp2Lo': [0], 'p2Lo': [0], 'PullAngle': [0], 'PullAngleC': [0], 'PullPhi': [0], 'PullPhiC': [0]} )
 
                 fmin_Hz = np.min(dfraw['fx.1'][dfraw['fx.1']>0]); fmax_Hz = np.max(dfraw['fx.1'][dfraw['fx.1']>0])                   
          #       print('fmin_Hz, fmax_Hz:' ,fmin_Hz, fmax_Hz)  #        fmin_Hz = 0.1; fmax_Hz = 15
@@ -639,7 +641,8 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
          #       coefD = 0.69 #  ID5: 0.98    ID4: 0.72    ID3: 0.66    ID2: 0.69     ID1: 0.84
                 if ( (inb==0) or ( (inb>0) and ( MolecID > dfstage['Molecule ID'][inb-1] ) ) ):
                     GuessDTheo = 0; Dx=0; frictionXY=0
-                
+                GuessDTheo = 0; Dx=0; frictionXY=0      # 20220415: caution introduced to avoid pb with empty powers
+               
                 for fittype, color in zip([0,1,2],['b','r','g']):
                     if (fittype == 1) and ( (inb==0) or ( (inb>0) and ( MolecID > dfstage['Molecule ID'][inb-1] ) ) ):
                         GuessDTheo = Dx; print('Ratio GuessDTheo/Dtheo=', GuessDTheo * frictionXY / kBT_pN_nm)
