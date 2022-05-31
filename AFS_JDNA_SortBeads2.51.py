@@ -39,20 +39,21 @@ rapa = False
 #outfolder = 'Out20220310_Rapa_AllMolec/'; rapa = True; nrow=11; ncol=17; nrow2=5; ncol2=7; deltaf = 2; minsize = 10; nmaxfit=50;  SelectForce = False
 if rapa: 
     outfolder = 'Out20220329_Rapa/'
-    nrow=9; ncol=16; nrow2=3; ncol2=7; deltaf = 2; minsize = 10; nmaxfit=50;  SelectForce = False
+    nrow=9; ncol=16; nrow2=3; ncol2=7; deltaf = 2; MinForce = 1; MaxForce = 15; minsize = 10; nmaxfit=50; SelectForce = False
     HighPowerMax = 35; DeltaP=0.2
     addgoldbead = False
 else:
     outfolder = 'Out20220414_Nef/'
-    nrow=9; ncol=16; nrow2=3; ncol2=5; nf = 9; deltaf = 3; minsize = 4
-    HighPowerMax = 10; DeltaP=0.05
+    nrow=9; ncol=16; nrow2=3; ncol2=4; nf = 9; deltaf = 3.5; MinForce = 5; MaxForce = 30; minsize = 4
+    HighPowerMax = 10.5; DeltaP=0.05
     addgoldbead = True
 print('Outfolder: ', outfolder)
 inputpath0="/home/laurent/DATA/Experiences Diverses/AFS/Data/SelectionJim/"
 
 dfstage_nef = pd.read_excel(inputpath0+'Stage Summary_Nef_20220323.xlsx')
-dfstage_nef = pd.read_excel(inputpath0+'Stage Summary_Nef_20220405_v2mod.xlsx')
-ListMolec_nef = np.array([1,2,3,5,6,7,8,9,10,11,12,13,14,15,16])
+dfstage_nef = pd.read_excel(inputpath0+'Stage Summary_Nef_20220405_v3.xlsx')
+#ListMolec_nef = np.array([1,2,3,5,6,7,8,9,10,11,12,13,14,15,16])
+ListMolec_nef = np.array([1,2,5,6,12,13,14,15,16,18,19])
 
 dfstage_rapa = pd.read_excel(inputpath0+'Summary_Rapamycin_sorted-by-molecule-ID_length_2022-03-04.xlsx')
 ListMolec_rapa = dfstage_rapa['Molecule ID'].unique()
@@ -62,11 +63,25 @@ removeMolec = np.array([22, 31, 32, 33, 39, 40, 41, 42, 43, 44, 45 ])
 ListMolec_rapa = np.setdiff1d(ListMolec_rapa,removeMolec)
 MolecIDa_fmin_Hz_set=14; MolecIDb_fmin_Hz_set=21; fmin_Hz_set=0.2
 
+startstr = ''; endstr = '.csv'
+if rapa:
+    folder_cycle = "Output_csv file_cycle_2021-11-30 rapa update/"
+    folder_calib = "Rapa_Calib_2022/" # previously  "Output_csv file_2022-Force calibration/"
+    folder_spectra = "Rapa_Spectra_FOV1_8/"
+    readfiles_calib = [f for f in os.listdir(inputpath0 + folder_calib) if ( f.endswith(endstr) & f.startswith(startstr) ) ]
+    print(folder_calib , len(readfiles_calib),'loaded files')
+    ziplist_calib = zip([readfiles_calib], [inputpath0 + folder_calib])
+else:
+    folder_cycle = "Output_csv files_2021-11-03 and 20 nef/"
+ #   folder_spectra = "Output_csv files_raw PSD_force calibration Nef/"
+    folder_spectra = "Output_csv files_4.57_2022-04-13 Raw Spectra Nef/"
+    folder_spectra_gold = "20201230-144513_Bead1_goldenbeadrawspectra/"
+
 sizefig = 1.5
 mindur=0.5; mindz = 100; maxdz = 300
 kres = 100; kBT = 4 # pN.nm
 Temperature_C = 25; kBT_pN_nm= 1.38e-23*(Temperature_C+273)*1.e12*1.e9
-deltaD = 0.4; MaxForce = 20
+deltaD = 0.4
 BeadRad=790. # Bead Radius in nm
 kc = 0.5
 p1Zo = 900 # typical open JDNA extension
@@ -146,23 +161,13 @@ if rapa: dFForceRapa = pd.read_excel(inputpath0+'Summary_Rapamycin_high sampling
 if addgoldbead:
     dfold = pd.read_csv(inputpath0+'Nef-Nef19_Life Time_2020-12-11_4p.csv')
     dfstage_gold = pd.read_csv(inputpath0+'Stage goldenbead 20220404_4p.csv')
+    # dfold = pd.read_csv(inputpath0+'Nef-Nef19_Life Time_2020-12-11.csv')
+    # dfstage_gold = pd.read_csv(inputpath0+'Stage goldenbead 20220404.csv')
     dfstage_gold = dfstage_gold.astype({'Tdms (cyclic measurement)': str, 'Tdms_force calibration': str, 'Trace calib':int})
     dfstage_gold['TdmsList'] = [f(x) for x in dfstage_gold['Tdms (cyclic measurement)'].values]
     dfstage_gold['TdmsList_calib'] = [f(x) for x in dfstage_gold['Tdms_force calibration'].values]
 
-startstr = ''; endstr = '.csv'
-if rapa:
-    folder_cycle = "Output_csv file_cycle_2021-11-30 rapa update/"
-    folder_calib = "Rapa_Calib_2022/" # previously  "Output_csv file_2022-Force calibration/"
-    folder_spectra = "Rapa_Spectra_FOV1_8/"
-    readfiles_calib = [f for f in os.listdir(inputpath0 + folder_calib) if ( f.endswith(endstr) & f.startswith(startstr) ) ]
-    print(folder_calib , len(readfiles_calib),'loaded files')
-    ziplist_calib = zip([readfiles_calib], [inputpath0 + folder_calib])
-else:
-    folder_cycle = "Output_csv files_2021-11-03 and 20 nef/"
- #   folder_spectra = "Output_csv files_raw PSD_force calibration Nef/"
-    folder_spectra = "Output_csv files_4.57_2022-04-13 Raw Spectra Nef/"
-    folder_spectra_gold = "20201230-144513_Bead1_goldenbeadrawspectra/"
+#######
 
 readfiles_cycle = [f for f in os.listdir(inputpath0 + folder_cycle) if ( f.endswith(endstr) & f.startswith(startstr) ) ]
 ziplist = zip([readfiles_cycle], [inputpath0 + folder_cycle])    
@@ -487,6 +492,7 @@ def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy, goldbead=False):   # D, 
                 if power>=25: fmin_Hz=1
                 if power>=30: fmin_Hz=5
             if goldbead: fmin_Hz=1; fmax_Hz=100
+            if not rapa and fmin_Hz<1: fmin_Hz=0.3
             #    print('fmin_Hz, fmax_Hz:' ,fmin_Hz, fmax_Hz)  #        fmin_Hz = 0.1; fmax_Hz = 15
             fr = dfraw['fx']; intfr = (fr>=fmin_Hz)&(fr<=fmax_Hz); frt=fr[intfr]
             print(f' fmin_Hz= {fmin_Hz:3.2f} fmax_Hz={fmax_Hz:3.2f}')
@@ -627,6 +633,7 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                     if power>=20: fmin_Hz=0.5
                     if power>=25: fmin_Hz=1
                     if power>=30: fmin_Hz=5
+                if not rapa and fmin_Hz<1: fmin_Hz=0.3
                 print(f' fmin_Hz= {fmin_Hz:3.2f} fmax_Hz={fmax_Hz:3.2f}')
                 fr = dfraw['fx']; intfr = (fr>=fmin_Hz)&(fr<=fmax_Hz); frt=fr[intfr]
                 fbinsX, PbinsX, dPbinsX = CalculatePSDBins(dfraw['fx.1'], dfraw['Pxx_specx'])
@@ -695,10 +702,10 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                 innt = df0['FileName'] == fname
            #     timehighpower = dfstage['Time at hight power (s)']
                 if sum(innt)==1:
-                    print('====== single csv file ======', fname, sum(innt))
+                    print('====== single trace csv file ======', fname, sum(innt))
                 if sum(innt)==0:
                     innt = (df0['FileName'] == nnt+'_FitsResults.csv') & (df0['bead'] == dfstage['Trace'][inb])
-                    print('====== multiple csv file ====== ', nnt+'_FitsResults.csv', sum(innt), 'Bead ', dfstage['Trace'][inb])
+                    print('====== multiple trace csv file ====== ', nnt+'_FitsResults.csv', sum(innt), 'Bead ', dfstage['Trace'][inb])
          #       u = df0['Tupjump_Tuphigh_mask_cycle'][innt].values
                 u = df0['Tupjump_Tuphigh'][innt].values
                 uz = df0['Zupjump_Zupmid'][innt].values
@@ -753,6 +760,9 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
             wdurB = wdur[int(ndur/2):ndur]
             for ax3i in [ax3x, ax3y, ax3t]:
                 ax3i.set_xlabel("Frequency (Hz)");  ax3i.set_ylabel("PSD"); ax3i.axis([0.05, 300, 0.1, 1e4])
+                if iID%ncol2!=0: ax3i.axes.get_yaxis().set_visible(False)
+                if iID//ncol2!=nrow2-1: ax3i.axes.get_xaxis().set_visible(False)
+                ax3i.legend(title='ID '+str(MolecID)+' y', title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
             if len(wdur) >= minsize:
                 ax = axall[count//ncol, count%ncol]
                 ax1 = axall1[count//ncol, count%ncol]
@@ -762,7 +772,7 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                 for axi in [ax, ax1]:
                     if count%ncol!=0: axi.axes.get_yaxis().set_visible(False)
                     if count//ncol!=nrow-1: axi.axes.get_xaxis().set_visible(False)
-                for ax2i in [ax2, ax2A, ax2B, ax3x, ax3y]:
+                for ax2i in [ax2, ax2A, ax2B]:
                     if iID%ncol2!=0: ax2i.axes.get_yaxis().set_visible(False)
                     if iID//ncol2!=nrow2-1: ax2i.axes.get_xaxis().set_visible(False)
                 refname = v[0].replace('FitsResults_','').replace('.csv','')
@@ -790,10 +800,9 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                     koff2B = np.nan; dkoff2B = np.nan
         #       (pEq0, dpEq0, kmin, kmax, x2, y2, y2_fit0) = survival(wdur, TEhigh, countNoOpen, 0, refname, mindur=mindur, ax=ax2 , col=col, fulllegend=False)
                 if kmin == 0: kmin = kmax/len(wdur)
-                for ax2i in [ax, ax1, ax2, ax2A, ax2B, ax3x, ax3y, ax3t]:
+                for ax2i in [ax, ax1, ax2, ax2A, ax2B, ax3x]:
                     if not ( (ax2i==ax3t) & (MolecID!=IDshow) ):
                         ax2i.legend(title='ID '+str(MolecID)+'x', title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
-                ax3y.legend(title='ID '+str(MolecID)+' y', title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
                 DeltaZ = np.mean(np.array(wdz)); dDeltaZ = np.std(np.array(wdz))
             else: 
                 print('insufficient or no data')
@@ -962,7 +971,6 @@ if addgoldbead:
         wfold, wdfold, woffold, wdoffold, wfLold, wdfLold = multisurvivalold(dfold, 1, dfstage_gold.shape[0], 'multisurvivalold')
         wfold = dfstage_gold['k'+xy+'global']*(dfstage_gold['Length (nm)']+dfstage_gold['Bead radius (nm)'])
         wdfold = dfstage_gold['dk'+xy+'global']*(dfstage_gold['Length (nm)']+dfstage_gold['Bead radius (nm)'])
-    #wfygP = wkygP*(wlgP+BeadRad); wdfygP = wdkygP*(wlgP+BeadRad) 
     (pEqold, eEqold, resold) = fitBellFriddle(logBellxB, wfold.values, np.asarray(woffold))
     print('Gold Bead Fitting Molec Bell' , '(', len(woffold) , ' points):  k0=  %.6f' % pEqold[0],'+/-  %.6f' % eEqold[0],  ' xB= %.2f'% pEqold[1],'+/- %.2f' % eEqold[1])
     wlEqold = BellxB(np.asarray(wfold), pEqold[0], pEqold[1])
@@ -982,6 +990,7 @@ def findR(wL, wD):
     wRout = np.zeros(len(wD))
     for iD, Di in enumerate(wD):
         wy = np.abs(kBT_pN_nm/FaxenXY(wRin, wL[iD])/(6*np.pi*1e-9*Di) - wRin)      
+    #    wy = np.abs(kBT_pN_nm/FaxenXY(wRin, 1000)/(6*np.pi*1e-9*Di) - wRin)      
         wRout[iD] = wRin[wy.argmin()]
         if wRout[iD]==500: wRout[iD]=np.nan
     return wRout
@@ -1412,7 +1421,7 @@ if SelectMolecule:
         axPfB.set_ylabel('Force (pN)'); axPfB.set_ylim(0,30)
         axPk.set_ylabel('kx, ky (pN/nm)'); axPk.set_ylim(0,1.2e-2)
         axPkB.set_ylabel('kx, ky (pN/nm)'); axPkB.set_ylim(0,1.2e-2)
-        axPkT.set_ylabel('kx, ky (pN/nm)'); axPkT.set_ylim(0,1.2e-2)
+        axPkT.set_ylabel('kx, ky (pN/nm)'); axPkT.set_ylim(0,1.5e-2)
         axPD.set_ylabel('Dx, Dy (µm²/s)'); axPD.set_ylim(0,0.4)
         axPDB.set_ylabel('Dx, Dy (µm²/s)'); axPDB.set_ylim(0,0.4)
         axPA.set_ylabel('Pulling Angle (deg)'); axPA.set_ylim(0,70)
@@ -1508,10 +1517,20 @@ if addgoldbead:
     wkx = np.append(wkx, 0 ); wdkx = np.append(wdkx, 0 ); wlmax = np.append(wlmax, dfstage_gold['Length (nm)'].max())
     wkz = np.append(wkz, 0 ); wLp = np.append(wLp, 0 ); wL0 = np.append(wL0, 0 )
     
-figname4a = 'RDiffusion'; fig = plt.figure(figname4a, figsize=(10,6), dpi=100); ax4a = plt.gca()
-sns.boxplot(x="Molecule ID", y='Rprecx', data=dfstage, ax=ax4a)
-ax4a.set_ylabel('Bead Radius deduced from Diffusion (nm)'); ax4a.set_xlim(-1,max(ListMolec))
-if SaveGraph: plt.savefig(outpath+figname4a, transparent=False)
+# ymin = min (np.min(dfstage['Rprecx']),  np.min(dfstage['Rprecy']))
+# ymax = max (np.max(dfstage['Rprecx']),  np.max(dfstage['Rprecy']))
+ymin = 750; ymax = 2100
+for xy in ['precx', 'precy', 'x', 'y']:   
+    figname4a = 'RDiffusion'+xy; fig = plt.figure(figname4a, figsize=(max(ListMolec)*0.25,6), dpi=100); ax4a = plt.gca()
+ #   sns.boxplot(x="Molecule ID", y='R'+xy, data=dfstage, ax=ax4a)
+    ax4a.set_xlabel('Molecule ID')#    ax4a.set_xticklabels(ax4a.get_xticklabels(), rotation=90)
+    ax4a.set_ylabel('Bead Radius deduced from Diffusion '+xy+' (nm)')
+    ax4a.set_ylim(ymin, ymax); ax4a.set_xlim(0,max(ListMolec)+1)
+    ax4a.scatter(dfstage['Molecule ID'], dfstage['R'+xy], c='k', marker='x', label='Measured')
+    ax4a.scatter(dfstage['Molecule ID'], dfstage['Bead radius (nm)'], c='r', marker='+', label="Nominal")
+    ax4a.legend(loc="upper right", fontsize=5)
+    if SaveGraph: plt.tight_layout(); plt.savefig(outpath+figname4a, transparent=False)
+
 
 ax.set_xlabel('Force (pN)'); ax.set_ylabel('koff (1/s)'); ax.set_yscale('log')
 ax.set_ylim(1e-5,0.2); ax.set_xlim(0,30)
@@ -1633,6 +1652,7 @@ if False:
 
 avgf=[]; avgk=[]; sdk=[]
 listf = deltaf*(np.arange(int((MaxForce-5)/deltaf))+0.5)
+listf = MinForce + deltaf*(np.arange(int((MaxForce-MinForce)/deltaf)))
 for f in listf:
     dfstagenonull = dfstage[~dfstage.isnull()]
     dfx = dfstage[ (dfstage[Fchoice]<f+deltaf/2) & (dfstage[Fchoice]>f-deltaf/2) & (dfstage['newkoff']).notnull() ]

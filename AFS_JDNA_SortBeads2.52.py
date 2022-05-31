@@ -34,25 +34,26 @@ SelectForce = False
 
 # https://seaborn.pydata.org/generated/seaborn.lmplot.html
 
-rapa = True
+rapa = False
 
 #outfolder = 'Out20220310_Rapa_AllMolec/'; rapa = True; nrow=11; ncol=17; nrow2=5; ncol2=7; deltaf = 2; minsize = 10; nmaxfit=50;  SelectForce = False
 if rapa: 
-    outfolder = 'Out20220519_Rapa/'
-    nrow=9; ncol=16; nrow2=3; ncol2=7; deltaf = 2; MinForce = 1; MaxForce = 25; minsize = 10; nmaxfit=50; SelectForce = False
+    outfolder = 'Out20220329_Rapa/'
+    nrow=9; ncol=16; nrow2=3; ncol2=7; deltaf = 2; MinForce = 1; MaxForce = 15; minsize = 10; nmaxfit=50; SelectForce = False
     HighPowerMax = 35; DeltaP=0.2
+    addgoldbead = False
 else:
-    outfolder = 'Out20220519_Nef/'
-    nrow=9; ncol=16; nrow2=3; ncol2=3; nf = 9; deltaf = 3.5; MinForce = 5; MaxForce = 30; minsize = 4
+    outfolder = 'Out20220425_Nef/'
+    nrow=9; ncol=16; nrow2=3; ncol2=4; nf = 9; deltaf = 3.5; MinForce = 5; MaxForce = 30; minsize = 4
     HighPowerMax = 10.5; DeltaP=0.05
+    addgoldbead = True
 print('Outfolder: ', outfolder)
 inputpath0="/home/laurent/DATA/Experiences Diverses/AFS/Data/SelectionJim/"
 
 dfstage_nef = pd.read_excel(inputpath0+'Stage Summary_Nef_20220323.xlsx')
-dfstage_nef = pd.read_excel(inputpath0+'Stage Summary_Nef_20220405_v5.xlsx')
+dfstage_nef = pd.read_excel(inputpath0+'Stage Summary_Nef_20220405_v3.xlsx')
 #ListMolec_nef = np.array([1,2,3,5,6,7,8,9,10,11,12,13,14,15,16])
-ListMolec_nef = np.array([1,2,5,6,12,13,14,15,16,18,19,20])
-ListMolec_nef = np.array([1,2,5,13,14,16,18,19,20])
+ListMolec_nef = np.array([1,2,5,6,12,13,14,15,16,18,19])
 
 dfstage_rapa = pd.read_excel(inputpath0+'Summary_Rapamycin_sorted-by-molecule-ID_length_2022-03-04.xlsx')
 ListMolec_rapa = dfstage_rapa['Molecule ID'].unique()
@@ -86,58 +87,66 @@ kc = 0.5
 p1Zo = 900 # typical open JDNA extension
 def FaxenXY(R, Z):  return 1 / ( 1 - (9/16)*(R/(Z+R)) + (1/8)*(R/(Z+R))**3 )
 def FaxenZ(R, Z):  return 1 / ( 1 - (9/8)*(R/(Z+R)) + (1/2)*(R/(Z+R))**3 )
+#friction0 = 6*np.pi*1.e-9*BeadRad       # units pN.s/nm
+#frictionXY = friction0 * FaxenXY(BeadRad, p1Zo)
+# Dxytheo0_mu2_per_s = 1e-6*kBT/friction0
+# Dxytheo_mu2_per_s = 1e-6*kBT/frictionXY
+# print('Dxytheo0_mu2_per_s=', Dxytheo0_mu2_per_s)
+# print('Dxytheo_mu2_per_s=', Dxytheo_mu2_per_s)
 #Temperature_C = 25; kBT_pN_nm= 1.38e-23*(Temperature_C+273)*1.e12*1.e9
 
 if not rapa:
     koffSPR = 1.8e-4; tmaxsurvival = 1500; minfrac=0.1
-    dfstage0 = dfstage_nef
+    dfstage = dfstage_nef
     ListMolec = ListMolec_nef
-    dfstage0['kx (pN/nm)']=0
+    dfstage['kx (pN/nm)']=0
 else:
     koffSPR = 22e-3; tmaxsurvival = 150; minfrac=0.01; tmaxsurvival = 50; minfrac=0.1
-    dfstage0 = dfstage_rapa
+    dfstage = dfstage_rapa
     ListMolec = ListMolec_rapa
 Nmolec = len(ListMolec)
 
+#Force_Python_Sel = 'Force_Python_NoR'
+
 def f(u): return u.replace(' ',',').split(',')
-dfstage0['Trace'] = dfstage0['Trace'].fillna(0)
-dfstage0 = dfstage0.astype({'Tdms (cyclic measurement)': str, 'Tdms_force calibration': str, 'Trace':int, 'Trace calib':int})
-dfstage0['TdmsList'] = [f(x) for x in dfstage0['Tdms (cyclic measurement)'].values]
-dfstage0['TdmsList_calib'] = [f(x) for x in dfstage0['Tdms_force calibration'].values]
+dfstage['Trace'] = dfstage['Trace'].fillna(0)
+dfstage = dfstage.astype({'Tdms (cyclic measurement)': str, 'Tdms_force calibration': str, 'Trace':int, 'Trace calib':int})
+dfstage['TdmsList'] = [f(x) for x in dfstage['Tdms (cyclic measurement)'].values]
+dfstage['TdmsList_calib'] = [f(x) for x in dfstage['Tdms_force calibration'].values]
 if rapa:
-    dfstage0['Force_pN'] = [float(str(x).replace('pN','')) for x in dfstage0['Force_Python_NoR'].values]
-    dfstage0['dForce_pN'] = [float(str(x).replace('pN','')) for x in dfstage0['Error bar_F_python'].values]
-    dfstage0['ForceLumicks_pN'] = [float(str(x).replace('pN','')) for x in dfstage0['Force_Lumicks'].values]
-    dfstage0['dForceLumicks_pN'] = [float(str(x).replace('pN','')) for x in dfstage0['Error bar_F_lumicks'].values]
+    dfstage['Force_pN'] = [float(str(x).replace('pN','')) for x in dfstage['Force_Python_NoR'].values]
+    dfstage['dForce_pN'] = [float(str(x).replace('pN','')) for x in dfstage['Error bar_F_python'].values]
+    dfstage['ForceLumicks_pN'] = [float(str(x).replace('pN','')) for x in dfstage['Force_Lumicks'].values]
+    dfstage['dForceLumicks_pN'] = [float(str(x).replace('pN','')) for x in dfstage['Error bar_F_lumicks'].values]
 else:
-    dfstage0['Force_pN']=np.nan; dfstage0['dForce_pN']=np.nan; dfstage0['ForceLumicks_pN']=np.nan; dfstage0['dForceLumicks_pN']=np.nan
-    dfstage0['Length_cyclic_open (nm)']=np.nan; dfstage0['error of length_cyclic_open']=np.nan   
-    dfstage0['Length_calibration (nm)']=np.nan; dfstage0['error of length']=np.nan
-    dfstage0['Length_cyclic_close (nm)']=np.nan; wdlcc = dfstage0['error of length_cyclic_close']=np.nan
-    dfstage0['No Close']=np.nan; dfstage0['Total cycles']=np.nan
-    dfstage0['Force_Python_NoR']=np.nan
+    dfstage['Force_pN']=np.nan; dfstage['dForce_pN']=np.nan; dfstage['ForceLumicks_pN']=np.nan; dfstage['dForceLumicks_pN']=np.nan
+    dfstage['Length_cyclic_open (nm)']=np.nan; dfstage['error of length_cyclic_open']=np.nan   
+    dfstage['Length_calibration (nm)']=np.nan; dfstage['error of length']=np.nan
+    dfstage['Length_cyclic_close (nm)']=np.nan; wdlcc = dfstage['error of length_cyclic_close']=np.nan
+    dfstage['No Close']=np.nan; dfstage['Total cycles']=np.nan
+    dfstage['Force_Python_NoR']=np.nan
 
-if rapa: dfstage0['% High power'] = 100*dfstage0['% High power']
+if rapa: dfstage['% High power'] = 100*dfstage['% High power']
 
-dfstage0['FOV'] = 0
+dfstage['FOV'] = 0
 ListFOV = np.array( [(1,5), (6,13), (14,23), (31,32), (33,33), (35,37), (40,42), (43,45)] )
 if rapa:
     for iFOV, boundFOV in enumerate(ListFOV):
-        dfstage0['FOV'] = np.where( (dfstage0['Molecule ID']>=boundFOV[0]) & (dfstage0['Molecule ID']<=boundFOV[1]) , iFOV+1, dfstage0['FOV'])
+        dfstage['FOV'] = np.where( (dfstage['Molecule ID']>=boundFOV[0]) & (dfstage['Molecule ID']<=boundFOV[1]) , iFOV+1, dfstage['FOV'])
     
-dfstage0['Intern'] = ''
-if rapa: dfstage0['Intern'] = np.where( dfstage0['Molecule ID']<=33 , 'Maryne', 'Adrien')
-if rapa: dfstage0['L0'] = np.where( dfstage0['Molecule ID'] <= 6 , 900, 1300)
-dfstage0['ForceOk']=1
+dfstage['Intern'] = ''
+if rapa: dfstage['Intern'] = np.where( dfstage['Molecule ID']<=33 , 'Maryne', 'Adrien')
+if rapa: dfstage['L0'] = np.where( dfstage['Molecule ID'] <= 6 , 900, 1300)
+dfstage['ForceOk']=1
 
-if SelectForce: dfstage0 = dfstage0[ (dfstage0['Intern']=='Adrien') | ( (dfstage0['Intern']=='Maryne') & (dfstage0['% High power']<=20)) ]
+if SelectForce: dfstage = dfstage[ (dfstage['Intern']=='Adrien') | ( (dfstage['Intern']=='Maryne') & (dfstage['% High power']<=20)) ]
 
-dfstage0 = dfstage0.sort_values(by=['Molecule ID', '% High power'], ignore_index=True)#, inplace=True)
+dfstage = dfstage.sort_values(by=['Molecule ID', '% High power'], ignore_index=True)#, inplace=True)
 
 if rapa: 
-    dfstageForceOk = dfstage0[dfstage0['ForceOk']>0]
+    dfstageForceOk = dfstage[dfstage['ForceOk']>0]
 else:
-    dfstageForceOk = dfstage0[dfstage0['Molecule ID'].isin(ListMolec)]
+    dfstageForceOk = dfstage[dfstage['Molecule ID'].isin(ListMolec)]
 
 colormap = cm.hsv(np.linspace(0, 1, Nmolec+1))
 colormapFOV = cm.rainbow(np.linspace(0, 1, len(ListFOV)))
@@ -146,7 +155,15 @@ SelecMarker = {'.': 'point','o': 'circle','s': 'square','p': 'pentagon','*': 'st
 poolmarker = cycle(SelecMarker) # poolmarker = cycle(Line2D.markers)
 poolmarker2x = cycle(SelecMarker) 
 poolmarker2y = cycle(SelecMarker) 
-#if rapa: dFForceRapa = pd.read_excel(inputpath0+'Summary_Rapamycin_high sampling rate.xlsx')
+if rapa: dFForceRapa = pd.read_excel(inputpath0+'Summary_Rapamycin_high sampling rate.xlsx')
+if addgoldbead:
+    dfold = pd.read_csv(inputpath0+'Nef-Nef19_Life Time_2020-12-11_4p.csv')
+    dfstage_gold = pd.read_csv(inputpath0+'Stage goldenbead 20220404_4p.csv')
+    # dfold = pd.read_csv(inputpath0+'Nef-Nef19_Life Time_2020-12-11.csv')
+    # dfstage_gold = pd.read_csv(inputpath0+'Stage goldenbead 20220404.csv')
+    dfstage_gold = dfstage_gold.astype({'Tdms (cyclic measurement)': str, 'Tdms_force calibration': str, 'Trace calib':int})
+    dfstage_gold['TdmsList'] = [f(x) for x in dfstage_gold['Tdms (cyclic measurement)'].values]
+    dfstage_gold['TdmsList_calib'] = [f(x) for x in dfstage_gold['Tdms_force calibration'].values]
 
 #######
 
@@ -207,11 +224,12 @@ def TextLinear(wx, wy):
     slope, intercept, r, p, se = linregress(wx[nonan], wy[nonan])
     return 'Slope '+"{:1.2f}".format(slope)
 
-#    def FitExp1(x, *p): return p[1]+(1-p[1])*np.exp(-x/p[0])
-def FitExp0(x, *p): return np.exp(-x/p[0])
-    
 def survival(dur, TEhigh, countNoOpen, shift, refname, tmaxsurvival = tmaxsurvival, mindur=0, ax=None, col='k', exportname=None, shortlegend=None):
 # calculates, fits and plots survival curve until TEhigh/1000.-shift
+
+#    def FitExp1(x, *p): return p[1]+(1-p[1])*np.exp(-x/p[0])
+    def FitExp0(x, *p): return np.exp(-x/p[0])
+
     print('Survival:', len(dur),'countNoOpen=', countNoOpen )
     dur2s = np.sort(dur[dur>mindur])
     print('nb events:', len(dur2s), 'without Nan:', len(dur2s[~np.isnan(dur2s)]) )
@@ -257,15 +275,160 @@ def survival(dur, TEhigh, countNoOpen, shift, refname, tmaxsurvival = tmaxsurviv
     print('Survival 1param fit 0-', maxtfit, 's: offrate=', '{:.2E}'.format(1/pEq0[0]), '+/-', '{:.2E}'.format(np.sqrt(pcovEq0[0][0])/pEq0[0]**2) , 'tau (s)=', '{:.2E}'.format(pEq0[0]))
     return(pEq0[0], np.sqrt(pcovEq0[0][0]), min(koffmin, koffmax), max(koffmin, koffmax), x2, y2, y2_fit0)
 
-def FitSpectrum(x, *p): return 4*kBT_pN_nm**2/(p[1]*p[0]*p[0]) * 1/( 1+ (x*2*np.pi*kBT_pN_nm/(p[1]*p[0]))**2 )
-        
-def QuickSpectrumFit(f, Pxx_spec, BeadRad_i, p1Zo, axis, GuessDTheo = 0, pprint=True):
+if SortingBeads:
+    print('Sorting beads based on coordinates')
+    plt.figure('MapTraj', figsize=(6,6), dpi=100); ax = plt.gca()
+    for i, idf in enumerate(df):
+        u=idf[1]
+        if 'X0med' not in u.columns:
+            print(idf[0], 'calibration file')
+        else:
+            x=u['X0med']; y=u['Y0med']; p=u['Phigh_%']; b=u['bead']
+        #    print(len(x))
+            if i==0:
+                x[np.isnan(x)]=-1e3; y[np.isnan(y)]=-1e3
+                u['beadrenum']=np.arange(len(x)); ntotb=len(x)
+                xp=np.copy(x); yp=np.copy(y); up=np.arange(len(x), dtype=int)
+        #        print('file', i, 'bead init', ntotb)
+                for j in range(len(x)):
+             #       print('file', int(p[j]),'%', 'bead', b[j], up[j], round(xp[j]), round(yp[j]))
+                    print(idf[0], int(p[j]),'%', 'bead', b[j], up[j], round(xp[j]), round(yp[j]))
+         #           print('file', i, 'bead', j, b[j], up[j], round(xp[j]), round(yp[j]))
+                    print('   new bead', int(u['beadrenum'][j]))
+                    ax.scatter(x[j], y[j], s=10, c=color[j])
+                    lab=str(i)+' / '+str(int(u['beadrenum'][j]))+' / '+str(int(b[j]))+' / '+str(int(p[j]))+'%'
+                    lab=str(int(p[j]))+'%'+' / '+str(int(b[j]))+' / '+str(int(u['beadrenum'][j]))
+                    ax.text(x[j], y[j]+5000, lab, fontsize=tagfontsize)
+            elif i>0:
+        #        print('file', i, len(x))
+                u['beadrenum']=np.zeros(len(x))-1
+                for j in range(len(x)):
+                    print(idf[0], int(p[j]),'%', 'bead', b[j], up[j], round(xp[j]), round(yp[j]))
+         #           print('file', i, 'bead', j, b[j], up[j], round(xp[j]), round(yp[j]))
+                    d=np.sqrt((x[j]-xp)**2+(y[j]-yp)**2)
+                    dnonan=d[~np.isnan(d)]
+                    if len(dnonan)>0:
+                        jpmin=np.argmin(dnonan); dmin=np.amin(dnonan)
+             #           print('    ',j, dmin, dmax)
+                        if dmin<dmax:
+                            u['beadrenum'][j]=up[jpmin]
+                            print('   old bead', int(u['beadrenum'][j]))
+                        else: 
+                            u['beadrenum'][j]=int(ntotb)
+                            xp=np.append(xp,[x[j]])
+                            yp=np.append(yp,[y[j]])
+                            up=np.append(up,[ntotb])
+                            ntotb+=1
+                            print('   new bead', int(u['beadrenum'][j]))
+                        ax.scatter(x[j], y[j], s=10, c=color[int(u['beadrenum'][j])])
+                        lab=str(i)+' / '+str(int(u['beadrenum'][j]))+' / '+str(int(b[j]))+' / '+str(int(p[j]))+'%'
+                        lab=str(int(p[j]))+'%'+' / '+str(int(b[j]))+' / '+str(int(u['beadrenum'][j]))
+                        ax.text(x[j], y[j]-(i-1)*5000, lab, fontsize=tagfontsize)
+                    else:
+                        print('Empty array')
+    
+def multiplots(df0, bname, uname, vname, figname, ylogscale=False, umax=None, vmax=None):
+    plt.figure(figname, figsize=(6,6), dpi=100); ax = plt.gca()
+    n=df0[bname]; u=df0[uname]; v=df0[vname]
+    for inb, nb in enumerate(n.values):
+        ax.errorbar(u[n==inb],v[n==inb], np.zeros(len(u[n==inb])), label=str(nb), fmt='+-')
+        if umax!=None: ax.set_xlim(0,umax)
+        if vmax!=None: ax.set_ylim(0,vmax)
+        ax.set_xlabel(uname); ax.set_ylabel(vname)
+    ax.legend()
+    if ylogscale: ax.set_yscale('log')
+    if SaveGraph: plt.savefig(outpath+figname, transparent=False)
+    return ax
+
+def multisurvivalold(dfold, nrow, ncol, figname):
+    fig, axallold= plt.subplots(nrow, ncol, num=figname, figsize=(ncol*sizefig, nrow*sizefig), dpi=100)
+    figname2 = figname+'Bis'; fig = plt.figure(figname2, figsize=(2.6,2.4), dpi=100); ax2old = plt.gca()
+       
+    wf = []; wdf = []; woff = []; wdoff = []; wfL = []; wdfL = []
+    for iif, f in enumerate(dfold.columns.values):
+        wf.append(float(re.split('_', f)[1]))        
+        wdf.append(float(re.split('_', f)[2]))
+        wfL.append(float(re.split('_', f)[3]))        
+        wdfL.append(float(re.split('_', f)[4]))        
+        dur = dfold[f].values
+        dur = dur[~np.isnan(dur)]
+        TEhigh = np.max(dur)*1000
+        print(f, 'TEhigh=', TEhigh)
+        if nrow>1:
+            axold = axallold[iif//ncol, iif%ncol]
+        else:
+            axold = axallold[iif%ncol]
+        (pEq0, dpEq0, pEq10, pEa11, x2, y2, y2_fit0)=survival(dur, TEhigh, 0, 0, f, ax=axold)
+        (pEq0, dpEq0, pEq10, pEa11, x2, y2, y2_fit0)=survival(dur, TEhigh, 0, 0, f, ax=ax2old)#, fulllegend=False)
+        ax2old.axes.get_yaxis().set_visible(False)
+        if iif%ncol!=0: axold.axes.get_yaxis().set_visible(False)
+        if iif//ncol!=nrow-1: axold.axes.get_xaxis().set_visible(False)
+        woff.append(1/pEq0); wdoff.append(dpEq0/pEq0**2)
+   #     print(f, ' TEhigh=', TEhigh, 'toff=', pEq0)
+    textvar = ax2old.text(1300, 0.1, 'ID 0', size=10)
+    if SaveGraph: plt.figure(figname); plt.tight_layout(); plt.savefig(outpath+figname, transparent=False)
+    if SaveGraph: plt.figure(figname2); plt.tight_layout(); plt.savefig(outpath+figname2, transparent=False)
+    return wf, wdf, woff, wdoff, wfL, wdfL
+
+def multisurvival(df0, nn, figname, minsize=1):
+    fig, axall= plt.subplots(nn, nn, num=figname, figsize=(nn*2, nn*2), dpi=100)
+    n = df0['tdmsfilename']
+    woff = []; wdoff = []
+    for inb, nf in enumerate(n.values):
+        u = df0['Tupjump_Tuphigh_mask_cycle'][inb]
+        dur = g(u)
+        TEhigh = df0['TEhigh_ms'][inb]
+        TEhigh = np.max(dur)*1000
+        countNoOpen = df0['countNoOpen'][inb]
+        tshiftsurvival = 0 # df0['tshiftsurvival'][inb]
+        ax = axall[inb//nn, inb%nn]
+        if len(dur[dur>0]) >= minsize:
+             (pEq0, dpEq0, pEq10, pEa11, x2, y2, y2_fit0, y2_fit)=survival(dur, TEhigh, countNoOpen, tshiftsurvival, df0['FileName'][inb], ax=ax)
+             woff.append(1/pEq0); wdoff.append(dpEq0/pEq0**2)
+        else: 
+            print('insufficient or no data')
+            woff.append(np.nan); wdoff.append(np.nan)
+        if inb%nn!=0: ax.axes.get_yaxis().set_visible(False)
+        if inb//nn!=nn-1: ax.axes.get_xaxis().set_visible(False)
+    if SaveGraph: plt.savefig(outpath+figname, transparent=False)
+    return woff, wdoff
+
+def render_mpl_table(data, col_width=3.0, row_height=0.625, font_size=14,
+                     header_color='#40466e', row_colors=['#f1f1f2', 'w'], edge_color='w',
+                     bbox=[0, 0, 1, 1], header_columns=0,
+                     ax=None, **kwargs):
+    if ax is None:
+        size = (np.array(data.shape[::-1]) + np.array([0, 1])) * np.array([col_width, row_height])
+        fig, ax = plt.subplots(figsize=size)
+        ax.axis('off')
+
+    mpl_table = ax.table(cellText=data.values, bbox=bbox, colLabels=data.columns, **kwargs)
+
+    mpl_table.auto_set_font_size(False)
+    mpl_table.set_fontsize(font_size)
+
+    for k, cell in  six.iteritems(mpl_table._cells):
+        cell.set_edgecolor(edge_color)
+        if k[0] == 0 or k[1] < header_columns:
+            cell.set_text_props(weight='bold', color='w')
+            cell.set_facecolor(header_color)
+        else:
+            cell.set_facecolor(row_colors[k[0]%len(row_colors) ])
+    return fig, ax
+
+def QuickSpectrumFit(f, Pxx_spec, BeadRad_i, p1Zo, axis, fitype, GuessDTheo = 0, pprint=True):
     friction0 = 6*np.pi*1.e-9*BeadRad_i       # units pN.s/nm
     if axis=='XY' or axis=='R':
         friction = friction0 * FaxenXY(BeadRad_i, p1Zo)
     elif axis=='Z':
         friction = friction0 * FaxenZ(BeadRad_i, p1Zo)
     Dtheo = kBT_pN_nm / friction if GuessDTheo==0 else GuessDTheo
+    if fitype==0:
+        def FitSpectrum(x, *p): return 4*kBT_pN_nm**2/(p[1]*p[0]*p[0]) * 1/( 1+ (x*2*np.pi*kBT_pN_nm/(p[1]*p[0]))**2 )
+    if fitype==1:
+        def FitSpectrum(x, *p): return 4*kBT_pN_nm**2/(p[1]*p[0]*p[0]) * 1/( 1+ (x*2*np.pi*kBT_pN_nm/(Dtheo*p[0]))**2 )
+    if fitype==2:
+        def FitSpectrum(x, *p): return 4*kBT_pN_nm**2/(Dtheo*p[0]*p[0]) * 1/( 1+ (x*2*np.pi*kBT_pN_nm/(Dtheo*p[0]))**2 )
     if np.sum(np.isnan(Pxx_spec))>0:
         print("Array contains Nan"); pEq=[np.nan, np.nan]; eEq=[np.nan, np.nan]
     else:
@@ -285,7 +448,8 @@ def QuickSpectrumFit(f, Pxx_spec, BeadRad_i, p1Zo, axis, GuessDTheo = 0, pprint=
 
 def FitSpectrumGen(x, *p): return 4*kBT_pN_nm**2/(p[1]*p[0]*p[0]) * 1/( 1+ (x*2*np.pi*kBT_pN_nm/(p[1]*p[0]))**2 )
 
-def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy):   # D, listk = GlobalSpecFit(dfstage, 1)
+def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy, goldbead=False):   # D, listk = GlobalSpecFit(dfstage, 1)
+    if goldbead: fig3xygold, ax3xygold = plt.subplots(1, 1, num='multispectrum'+xy+'gold', figsize=(4*sizefig, 4*sizefig), dpi=100)
     dfs = dfstage[dfstage['Molecule ID']==MolecID].reset_index()
     n = dfs['TdmsList']; n_calib = dfs['TdmsList_calib']
     npower = dfs.shape[0]; print('Global Fit Spec ID:', MolecID, ' #powers=', npower, xy)
@@ -293,7 +457,6 @@ def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy):   # D, listk = GlobalSp
     params.add('D',  value=0.2e6, min=0.01e6, max=1e6)
     datax = {}; listfile = []
     listk = []; listD = []; listdk = []; listdD = []
-    listL = []
     for inb, nt in enumerate(n.values):
         prefixe = n_calib[inb][0]+'_Bead'+str(int(dfs['Trace calib'][inb]))
         if rapa and MolecID>=MolecIDa_fmin_Hz_set and MolecID<=MolecIDb_fmin_Hz_set:
@@ -305,12 +468,13 @@ def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy):   # D, listk = GlobalSp
             power = dfs['% High power'][inb]
             suffixe = f'{power:g}'+'%.csv'
         fname_spectrarawXY = prefixe +'_rawXYspectrum_'+ suffixe
+        fname_spectrarawXY = prefixe +'_rawXYspectrum_'+ suffixe
         print(' Spectrum file', fname_spectrarawXY, end='')
         fullfilename = inputpath0 + folder_spectra + fname_spectrarawXY
         if os.path.isfile(fullfilename):
             listfile += [1]
             params.add('k'+str(inb), value=1e-2, min=1e-4, max=1e-1, vary=True)
-            dfraw = pd.read_csv(fullfilename, index_col=False)                 
+            dfraw = pd.read_csv(inputpath0 + folder_spectra + fname_spectrarawXY, index_col=False)                 
             fmin_Hz = np.min(dfraw['fx.1'][dfraw['fx.1']>0]); fmax_Hz = np.max(dfraw['fx.1'][dfraw['fx.1']>0])
             if power>=25: fmin_Hz=1           
             if rapa and MolecID>=MolecIDa_fmin_Hz_set and MolecID<=MolecIDb_fmin_Hz_set:
@@ -318,28 +482,20 @@ def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy):   # D, listk = GlobalSp
                 if power>=20: fmin_Hz=0.5
                 if power>=25: fmin_Hz=1
                 if power>=30: fmin_Hz=5
-            if not rapa and fmin_Hz<1: fmin_Hz=0.6 #fmin_Hz=0.3
-            if not rapa and fmax_Hz>100: fmax_Hz=150 #fmin_Hz=0.3
+            if goldbead: fmin_Hz=1; fmax_Hz=100
+            if not rapa and fmin_Hz<1: fmin_Hz=0.3
             #    print('fmin_Hz, fmax_Hz:' ,fmin_Hz, fmax_Hz)  #        fmin_Hz = 0.1; fmax_Hz = 15
             fr = dfraw['fx']; intfr = (fr>=fmin_Hz)&(fr<=fmax_Hz); frt=fr[intfr]
             print(f' fmin_Hz= {fmin_Hz:3.2f} fmax_Hz={fmax_Hz:3.2f}')
             datax['frt'+str(inb)] = frt
             datax['Pxy'+str(inb)] = dfraw['Pxx_spec'+xy][intfr]    
+            if goldbead:
+                fbinsX, PbinsX, dPbinsX = CalculatePSDBins(frt, datax['Pxy'+str(inb)][intfr])
+                col = colormap[0]
+                poolmarker2 = next(poolmarker2x) if xy=='x' else next(poolmarker2y)
+                ax3xygold.loglog(fbinsX, PbinsX, 'k-', marker=poolmarker2, ms=6 , c=col, label=str(power)+'%', alpha=0.3)
         else:
             print(' missing file'); listfile += [0]
-        fname_fitresult = prefixe +'_FitsResults_'+ suffixe
-        print(' FitResults file', fname_fitresult)
-        fullfilename = inputpath0 + folder_spectra + fname_fitresult
-        if os.path.isfile(fullfilename):
-            dffit = pd.read_csv(fullfilename, index_col=False)
-            if not rapa:
-                listL += [dffit['Cp1Lo'].values]
-            else:
-                listL += [dffit['Cp1Lo'].values[0]]
-        else:
-            print(' missing file')
-            listL += [np.nan]
-            
     def TotalFit(param, x=None, aax=None):
         inb0 = -1
         for inb in range(npower):
@@ -366,10 +522,16 @@ def GlobalSpecFit(dfstage, folder_spectra, MolecID, xy):   # D, listk = GlobalSp
                 listD += [D]; listdD += [dD]
             else:
                 listk += [np.nan]; listD += [np.nan]
-                listdk += [np.nan]; listdD += [np.nan]          
+                listdk += [np.nan]; listdD += [np.nan]
     else:
-        listD=[np.nan]*npower; listk=[np.nan]*npower; listdD=[np.nan]*npower; listdk=[np.nan]*npower; listL=[np.nan]*npower
-    return listD, listk, listdD, listdk, listL
+        listD=[np.nan]*npower; listk=[np.nan]*npower; listdD=[np.nan]*npower; listdk=[np.nan]*npower
+    if SaveGraph and goldbead:
+        for inb in range(npower):
+            FitPxx_specrg = FitSpectrumGen(frt, listk[inb],  listD[inb]) 
+            ax3xygold.loglog(frt, FitPxx_specrg, 'k-')
+        ax3xygold.legend()
+        plt.figure('multispectrum'+xy+'gold'); plt.savefig(outpath+'multispectrum'+xy+'gold', transparent=False)
+    return listD, listk, listdD, listdk
 
 def CalculatePSDBins(f, Pxx_spec):       
     nbins=101; fbins=np.logspace(-2,3,nbins); Pbins=np.ones(nbins); dPbins=np.zeros(nbins)
@@ -416,7 +578,7 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
         MolecID = dfstage['Molecule ID'][inb]
         BeadRad_i = dfstage['Bead radius (nm)'][inb]
         friction0 = 6*np.pi*1.e-9*BeadRad_i
-        print('Molecule ID=', MolecID, 'Power(%)=', dfstage['% High power'][inb], ' Radius=', BeadRad_i, ' Cycle file',nt)
+        print('Molecule ID=', MolecID, ' Radius=',BeadRad_i, ' Cycle file',nt)
         print(' Calib file', n_calib[inb])
 
         if (SelectMolecule == False) or (MolecID in ListMolec):
@@ -453,21 +615,9 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                 fnameres = inputpath0 + folder_spectra + fname_spectraresults
                 if os.path.isfile(fnameres):
                     dfres = pd.read_csv(fnameres, index_col=False)
-                    if 'p1Lo' not in dfres.columns: dfres['p1Lo'] = dfres.Cp1Lo; print('dfres.p1Lo = dfres.Cp1Lo')
-                    if 'p1Lo_nm' in dfres.columns: dfres['p1Lo'] = dfres.p1Lo_nm; print('dfres.p1Lo = dfres.p1Lo_nm')
-                    if 'p2Lo' not in dfres.columns: dfres['p2Lo'] = dfres.Cp2Lo; print('dfres.p1Lo = dfres.Cp1Lo')
-                    if 'p2Lo_nm' in dfres.columns: dfres['p2Lo'] = dfres.p2Lo_nm; print('dfres.p1Lo = dfres.p1Lo_nm')
-                    if 'PullAngle_deg' in dfres.columns: dfres['PullAngle'] = dfres.PullAngle_deg
-                    if 'PullPhi' not in dfres.columns: dfres['PullPhi'] = dfres.PullPhiC; print('dfres.PullPhiC')
-                    # print(fnameres, ' exists')
-                    # print(dfres.head())
-                    # print(dfres['Cp1Lo'][0])
-                    # print(dfres['p1Lo'][0])
-                    # print(dfres['Cp2Lo'][0], dfres['p2Lo'][0])
                 else:
-         #           dfres = pd.DataFrame(data={'Cp1Lo_nm': [0], 'p1Lo_nm': [0], 'Cp2Lo_nm': [0], 'p2Lo': [0], 'PullAngle': [0], 'PullAngleC': [0], 'PullPhi': [0], 'PullPhiC': [0]} )
                     dfres = pd.DataFrame(data={'Cp1Lo': [0], 'p1Lo': [0], 'Cp2Lo': [0], 'p2Lo': [0], 'PullAngle': [0], 'PullAngleC': [0], 'PullPhi': [0], 'PullPhiC': [0]} )
-                    print(fnameres, ' does not exist')
+
                 fmin_Hz = np.min(dfraw['fx.1'][dfraw['fx.1']>0]); fmax_Hz = np.max(dfraw['fx.1'][dfraw['fx.1']>0])                   
          #       print('fmin_Hz, fmax_Hz:' ,fmin_Hz, fmax_Hz)  #        fmin_Hz = 0.1; fmax_Hz = 15
                 if power>=25: fmin_Hz=1
@@ -476,8 +626,7 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                     if power>=20: fmin_Hz=0.5
                     if power>=25: fmin_Hz=1
                     if power>=30: fmin_Hz=5
-                if not rapa and fmin_Hz<1: fmin_Hz=0.6 #fmin_Hz=0.3
-                if not rapa and fmax_Hz>100: fmax_Hz=150 #fmin_Hz=0.3
+                if not rapa and fmin_Hz<1: fmin_Hz=0.3
                 print(f' fmin_Hz= {fmin_Hz:3.2f} fmax_Hz={fmax_Hz:3.2f}')
                 fr = dfraw['fx']; intfr = (fr>=fmin_Hz)&(fr<=fmax_Hz); frt=fr[intfr]
                 fbinsX, PbinsX, dPbinsX = CalculatePSDBins(dfraw['fx.1'], dfraw['Pxx_specx'])
@@ -498,15 +647,17 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                     if (fittype == 1) and ( (inb==0) or ( (inb>0) and ( MolecID > dfstage['Molecule ID'][inb-1] ) ) ):
                         frictionXY = friction0 * FaxenXY(BeadRad_i, p1Zo)
                         GuessDTheo = Dx; print('Ratio GuessDTheo/Dtheo=', GuessDTheo * frictionXY / kBT_pN_nm)
-                    kxr, Dxr, dkxr, dDxr, fc_xr, frictionXY, FitPxx_specxr = QuickSpectrumFit(frt, dfraw['Pxx_specx'][intfr],BeadRad_i, p1Zo, 'XY', GuessDTheo = GuessDTheo, pprint=False)                        
-                    kyr, Dyr, dkyr, dDyr, fc_yr, frictionXY, FitPxx_specyr = QuickSpectrumFit(frt, dfraw['Pxx_specy'][intfr],BeadRad_i, p1Zo, 'XY', GuessDTheo = GuessDTheo, pprint=False)                       
-                    kx, Dx, dkx, dDx, fc_x, frictionXY, FitPxx_specx = QuickSpectrumFit(fxt, dfx['Pbins'][intfx],BeadRad_i, p1Zo, 'XY', GuessDTheo = GuessDTheo, pprint=False)
-                    ky, Dy, dky, dDy, fc_y, frictionXY, FitPxx_specy = QuickSpectrumFit(fyt, dfy['Pbins'][intfy],BeadRad_i, p1Zo, 'XY', GuessDTheo = GuessDTheo, pprint=False)
-                    if MolecID==IDshow: ax3t.loglog(fxt, FitPxx_specx, color+'-', label='x fit', alpha=0.5)
+                    kxr, Dxr, dkxr, dDxr, fc_xr, frictionXY, FitPxx_specxr = QuickSpectrumFit(frt, dfraw['Pxx_specx'][intfr],BeadRad_i, p1Zo, 'XY', fittype, GuessDTheo = GuessDTheo, pprint=False)                        
+                    kyr, Dyr, dkyr, dDyr, fc_yr, frictionXY, FitPxx_specyr = QuickSpectrumFit(frt, dfraw['Pxx_specy'][intfr],BeadRad_i, p1Zo, 'XY', fittype, GuessDTheo = GuessDTheo, pprint=False)                       
+                    kx, Dx, dkx, dDx, fc_x, frictionXY, FitPxx_specx = QuickSpectrumFit(fxt, dfx['Pbins'][intfx],BeadRad_i, p1Zo, 'XY', fittype, GuessDTheo = GuessDTheo, pprint=False)
+                    ky, Dy, dky, dDy, fc_y, frictionXY, FitPxx_specy = QuickSpectrumFit(fyt, dfy['Pbins'][intfy],BeadRad_i, p1Zo, 'XY', fittype, GuessDTheo = GuessDTheo, pprint=False)
+                    if MolecID==IDshow: ax3t.loglog(fxt, FitPxx_specx, color+'-', label='x fit'+str(fittype), alpha=0.5)
+                    # if fittype==2: ax3.loglog(fxt, FitPxx_specx, 'k', label='x fit'+str(fittype), alpha=0.5)
+                    # if fittype==2: ax3.loglog(frt, FitPxx_specxr, 'b', label='xr fit'+str(fittype), alpha=0.5)
                     FitPxx_specxrg = FitSpectrumGen(frt, dfstage['kxglobal'][inb],  dfstage['Dxglobal'][inb])
                     FitPxx_specyrg = FitSpectrumGen(frt, dfstage['kyglobal'][inb],  dfstage['Dyglobal'][inb])
-                    ax3x.loglog(frt, FitPxx_specxrg, 'k-') 
-                    ax3y.loglog(frt, FitPxx_specyrg, 'k-') 
+                    if fittype==0: ax3x.loglog(frt, FitPxx_specxrg, 'k-') 
+                    if fittype==0: ax3y.loglog(frt, FitPxx_specyrg, 'k-') 
                     fitspec = [MolecID, power, fittype, GuessDTheo, fmin_Hz, fmax_Hz,
                                kxr, Dxr, Dxr*frictionXY/kBT_pN_nm, dkxr, dDxr, dDxr*frictionXY/kBT_pN_nm,
                                kyr, Dyr, Dyr*frictionXY/kBT_pN_nm, dkyr, dDyr, dDyr*frictionXY/kBT_pN_nm,
@@ -604,8 +755,7 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                 ax3i.set_xlabel("Frequency (Hz)");  ax3i.set_ylabel("PSD"); ax3i.axis([0.05, 300, 0.1, 1e4])
                 if iID%ncol2!=0: ax3i.axes.get_yaxis().set_visible(False)
                 if iID//ncol2!=nrow2-1: ax3i.axes.get_xaxis().set_visible(False)
-            ax3x.legend(title='ID '+str(MolecID)+' x', title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
-            ax3y.legend(title='ID '+str(MolecID)+' y', title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
+                ax3i.legend(title='ID '+str(MolecID)+' y', title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
             if len(wdur) >= minsize:
                 ax = axall[count//ncol, count%ncol]
                 ax1 = axall1[count//ncol, count%ncol]
@@ -618,8 +768,11 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                 for ax2i in [ax2, ax2A, ax2B]:
                     if iID%ncol2!=0: ax2i.axes.get_yaxis().set_visible(False)
                     if iID//ncol2!=nrow2-1: ax2i.axes.get_xaxis().set_visible(False)
+                # refname = v[0].replace('FitsResults_','').replace('.csv','')
+                # refname = 'ID '+str(MolecID)+' '+str(dfstage[Force_Python_Sel][inb]) +'\n '+str(count)+' '+refname
                 if rapa: tmax = min(tmaxsurvival*1000, TEhigh)
                 else: tmax = TEhigh
+        #        shortlegend = "{:1.1f}".format(dfstage[Force_Python_Sel][inb])+'pN'
                 shortlegend = str(power)+'%'
 
                 ax1.scatter(wdur, wdz, marker='.', c=col, label=shortlegend)
@@ -641,9 +794,9 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                 else:
                     koff2B = np.nan; dkoff2B = np.nan
                 if kmin == 0: kmin = kmax/len(wdur)
-                for ax2i in [ax, ax1, ax2, ax2A, ax2B]:
+                for ax2i in [ax, ax1, ax2, ax2A, ax2B, ax3x]:
                     if not ( (ax2i==ax3t) & (MolecID!=IDshow) ):
-                        ax2i.legend(title='ID '+str(MolecID), title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
+                        ax2i.legend(title='ID '+str(MolecID)+'x', title_fontsize=5, prop={'size': 5}, fontsize=5, loc="upper right")
                 DeltaZ = np.mean(np.array(wdz)); dDeltaZ = np.std(np.array(wdz))
             else: 
                 print('insufficient or no data')
@@ -655,8 +808,7 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
             if len(wdur) >= minsize and np.min(wdur) > 0.7*np.max(wdur):
                 print('constant max duration')
                 koff = 1/np.max(wdur)/len(wdur); dkoff = koff
-                koff = np.nan; dkoff = np.nan
-            #    ax.legend(title='toff='+str(int(1/koff)), title_fontsize=6, prop={'size': 6})
+                ax.legend(title='toff='+str(int(1/koff)), title_fontsize=6, prop={'size': 6})
         else:
             print('Non selected Molecule ID')
             koff = np.nan; dkoff = np.nan
@@ -672,7 +824,7 @@ def ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, figname, pprint=
                    Fcyclex, Fcycley, Dcyclex, Dcycley, FSDx, FSDy, FSDx_c, FSDy_c, p1Lo_nm, p2Lo_nm]
         dfoffratelist.append(offrate)
         
-        print('toff=', 1/koff, 'koff=', koff, 'dkoff=', dkoff)
+        print('toff=', 1/koff, 'dkoff=', dkoff)
         
     dfoffrate = pd.DataFrame(dfoffratelist, columns = columnsoffrate)
     dffitspec = pd.DataFrame(dffitspeclist, columns = columnsfitspec)
@@ -766,6 +918,7 @@ figname2Ter4 = 'kz vs Lp'; fig = plt.figure(figname2Ter4, figsize=(6,6), dpi=100
 figname2Ter5 = 'Lp vs Bell Force'; fig = plt.figure(figname2Ter5, figsize=(6,6), dpi=100); ax2Ter5 = plt.gca()
 figname2Ter7 = 'DZ vs Length'; fig = plt.figure(figname2Ter7, figsize=(6,6), dpi=100); ax2Ter7 = plt.gca()
 figname3 = 'Lumicks vs Python force'; fig = plt.figure(figname3, figsize=(6,6), dpi=100); ax3 = plt.gca()
+#plt.figure('multisurvival2'+'Ter'); axall3_ = plt.gca()
 
 figsize = (ncol*sizefig, nrow*sizefig)
 figBis, axallBis = plt.subplots(nrow2, ncol2, num=figname+'Bis', figsize=figsize, dpi=100)
@@ -802,6 +955,27 @@ figXYF = 'XvsYcalibF'; fig = plt.figure(figXYF, figsize=(6,6), dpi=100); axXYF =
 figRR = 'Rretrieval'; fig = plt.figure(figRR, figsize=(6,6), dpi=100); axRR = plt.gca()
 figRR1 = 'Rretrieval1'; fig = plt.figure(figRR1, figsize=(6,6), dpi=100); axRR1 = plt.gca()
 
+if addgoldbead:
+    for xy in ['x', 'y']:
+        listD, listk, listdD, listdk = GlobalSpecFit(dfstage_gold, folder_spectra_gold, 0, xy, goldbead=True)
+        dfstage_gold['k'+xy+'global'] = listk; dfstage_gold['dk'+xy+'global'] = listdk
+        dfstage_gold['D'+xy+'global'] = listD; dfstage_gold['dD'+xy+'global'] = listdD
+        dfstage_gold['R'+xy] = kBT_pN_nm/FaxenXY(dfstage_gold['Bead radius (nm)'], p1Zo)/(6*np.pi*1e-9*dfstage_gold['D'+xy+'global'])  
+        
+        wfold, wdfold, woffold, wdoffold, wfLold, wdfLold = multisurvivalold(dfold, 1, dfstage_gold.shape[0], 'multisurvivalold')
+        wfold = dfstage_gold['k'+xy+'global']*(dfstage_gold['Length (nm)']+dfstage_gold['Bead radius (nm)'])
+        wdfold = dfstage_gold['dk'+xy+'global']*(dfstage_gold['Length (nm)']+dfstage_gold['Bead radius (nm)'])
+    (pEqold, eEqold, resold) = fitBellFriddle(logBellxB, wfold.values, np.asarray(woffold))
+    print('Gold Bead Fitting Molec Bell' , '(', len(woffold) , ' points):  k0=  %.6f' % pEqold[0],'+/-  %.6f' % eEqold[0],  ' xB= %.2f'% pEqold[1],'+/- %.2f' % eEqold[1])
+    wlEqold = BellxB(np.asarray(wfold), pEqold[0], pEqold[1])
+    xBold = pEqold[1]; dxBold = eEqold[1]
+    k0old = pEqold[0] ; dk0old = eEqold[0]
+    fBold = kBT/pEqold[1]; dfBold = kBT*eEqold[1]/pEqold[1]**2
+    ax.errorbar(wfold, woffold, wdoffold, wdfold, label='ID 0', c='k', fmt='o-', alpha=0.3)
+    ax.errorbar(wfold, wlEqold, c='k', fmt='--', alpha=0.5)
+    ax2Bis.errorbar(xBold, k0old, dk0old, dxBold, label='ID 0', c='k', fmt='o', alpha=0.5)
+    ax2.errorbar(fBold, k0old, dk0old, dfBold, label='ID 0', c='k', fmt='o', alpha=0.5)
+    ax4.errorbar(xBold, np.asarray(wfold).mean(), np.asarray(wfold).std(), dxBold, label='ID 0', c='k', fmt='o', alpha=0.5)
 #ax3.errorbar(wfold, wfL, wdfL, wdfold, c=c, label='ID='+str(x), fmt='o', alpha=0.5)
 ax.axhline(y=koffSPR, color='r', linestyle='-.', label='SPR')
 
@@ -816,32 +990,29 @@ def findR(wL, wD):
     return wRout
     
 for xy in ['x', 'y']:
-    listDglobal = []; listkglobal = []; listdDglobal = []; listdkglobal = []; listLglobal=[]
+    listDglobal = []; listkglobal = []; listdDglobal = []; listdkglobal = []
     for ii, MolecID in enumerate(np.arange(np.max(ListMolec))+1):# enumerate(ListMolec_rapa): #:
-        listD, listk, listdD, listdk, listL = GlobalSpecFit(dfstage0, folder_spectra, MolecID, xy)
+        listD, listk, listdD, listdk = GlobalSpecFit(dfstage, folder_spectra, MolecID, xy)
         listkglobal.append(listk); listdkglobal.append(listdk)
         listDglobal.append(listD); listdDglobal.append(listdD)
-        listLglobal.append(listL)
     flk = [val for sublist in listkglobal for val in sublist]; fldk = [val for sublist in listdkglobal for val in sublist]
     flD = [val for sublist in listDglobal for val in sublist]; fldD = [val for sublist in listdDglobal for val in sublist]
-    flL = [val for sublist in listLglobal for val in sublist]
-    ll = len(dfstage0['Molecule ID']) - len(flk)
-    dfstage0['k'+xy+'global'] = np.array(flk+[np.nan]*ll); dfstage0['dk'+xy+'global'] = np.array(fldk+[np.nan]*ll)
-    dfstage0['D'+xy+'global'] = np.array(flD+[np.nan]*ll); dfstage0['dD'+xy+'global'] = np.array(fldD+[np.nan]*ll)
-    if xy=='x': dfstage0['Lglobal'] = np.array(flL+[np.nan]*ll)
-    dfstage0['R'+xy] = kBT_pN_nm/FaxenXY(dfstage0['Bead radius (nm)'], p1Zo)/(6*np.pi*1e-9*dfstage0['D'+xy+'global'])    
+    ll = len(dfstage['Molecule ID']) - len(flk)
+    dfstage['k'+xy+'global'] = np.array(flk+[np.nan]*ll); dfstage['dk'+xy+'global'] = np.array(fldk+[np.nan]*ll)
+    dfstage['D'+xy+'global'] = np.array(flD+[np.nan]*ll); dfstage['dD'+xy+'global'] = np.array(fldD+[np.nan]*ll)
+    dfstage['R'+xy] = kBT_pN_nm/FaxenXY(dfstage['Bead radius (nm)'], p1Zo)/(6*np.pi*1e-9*dfstage['D'+xy+'global'])    
 
-dfoffrate, dffitspec =  ReadFromdf_Multisurvival(dfstage0, nrow, ncol, nrow2, ncol2, 'multisurvival2', minsize=minsize, mindur=mindur, mindz=mindz, maxdz=maxdz, pprint=True)
+dfoffrate, dffitspec =  ReadFromdf_Multisurvival(dfstage, nrow, ncol, nrow2, ncol2, 'multisurvival2', minsize=minsize, mindur=mindur, mindz=mindz, maxdz=maxdz, pprint=True)
 
-dfstage1 = pd.concat([ dfstage0.reset_index(), dfoffrate.reset_index()], axis=1)
+dfstage0 = pd.concat([ dfstage.reset_index(), dfoffrate.reset_index()], axis=1)
 dffitspec['Molecule ID'] = dffitspec['MolecID']
 dffitspec['% High power'] = dffitspec['power']
 if rapa:
-    dfstage1['% High power'] = dfstage1['% High power'].astype(int)
+    dfstage0['% High power'] = dfstage0['% High power'].astype(int)
 else:
-    dfstage1['% High power'] = dfstage1['% High power'].astype(float)
+    dfstage0['% High power'] = dfstage0['% High power'].astype(float)
 dffitspec_ = (dffitspec[dffitspec['fittype']==0]).reset_index(drop=True)
-dfstage = pd.merge(dfstage1, dffitspec_, on = ["Molecule ID", "% High power"], how="outer", indicator=True )
+dfstage = pd.merge(dfstage0, dffitspec_, on = ["Molecule ID", "% High power"], how="outer", indicator=True )
 
 dfstage['newdkoff2AB'] = np.abs(dfstage['newkoff2A'] - dfstage['newkoff2B'])
 dfstage['Ffit'] = np.zeros(len(dfstage['newkoff'])) 
@@ -885,7 +1056,6 @@ if SelectMolecule:
         wkxP = dfx['kx_c']; wkyP = dfx['ky_c']
         wDxP = dfx['Dx_c']*1e-6; wDyP = dfx['Dy_c']*1e-6
         wlCcalP = dfx['Cp1Lo_c']; wlcalP = dfx['p1Lo_c']
-   
         wfL = dfx['ForceLumicks_pN']; wdfL = dfx['dForceLumicks_pN']
         wFCyclex = dfx['Fcyclex']; wFCycley = dfx['Fcycley']
         wDCyclex = dfx['Dcyclex']*1e-6; wDCycley = dfx['Dcycley']*1e-6
@@ -905,8 +1075,7 @@ if SelectMolecule:
         wkCyclex = wFCyclex/(wlco+BeadRad_i)
         wkCycley = wFCycley/(wlco+BeadRad_i)
        
-        wlgP = dfx['Lglobal']  # wlP #  wlgP = wlcalP
-        wlcalP = wlgP
+        wlgP = wlP #  wlgP = wlcalP
         wfxgP = wkxgP*(wlgP+BeadRad_i); wdfxgP = wdkxgP*(wlgP+BeadRad_i)
         wfygP = wkygP*(wlgP+BeadRad_i); wdfygP = wdkygP*(wlgP+BeadRad_i) 
   #      print(wkxgP); print(wlgP); print(BeadRad_i)
@@ -993,11 +1162,8 @@ if SelectMolecule:
         wfc = (wkxgP+wkygP)*( wDxgP[0] + wDygP[0] )/4/(2*np.pi*kBT_pN_nm)
   #      print(wfc, wfmax_Hz) 
         iPok = wfc < wfmax_Hz/2
-        iPok = wDxPB>0
-        # axPDB.errorbar(wP[iPok], wDxP[iPok], c=c, fmt=symb+'-', label='Dx', alpha=0.5) 
-        # axPDB.errorbar(wP[iPok], wDyP[iPok], c=c, fmt='s-', markerfacecolor='none', label='Dy', alpha=0.5)
-        axPDB.errorbar(wP[iPok], wDxPB[iPok]*1e-6, c=c, fmt=symb+'-', label='Dx', alpha=0.5) 
-        axPDB.errorbar(wP[iPok], wDyPB[iPok]*1e-6, c=c, fmt='s-', markerfacecolor='none', label='Dy', alpha=0.5)    
+        axPDB.errorbar(wP[iPok], wDxP[iPok], c=c, fmt=symb+'-', label='Dx', alpha=0.5) 
+        axPDB.errorbar(wP[iPok], wDyP[iPok], c=c, fmt='s-', markerfacecolor='none', label='Dy', alpha=0.5)    
         
         axPP.errorbar(wP, wPlateauxS, c=c, fmt=symb+'-', label='Plateau x S', alpha=0.5) 
         axPP.errorbar(wP, wPlateauyS, c=c, fmt=symb+'-', markerfacecolor='none', label='Plateau y S', alpha=0.5) 
@@ -1028,20 +1194,21 @@ if SelectMolecule:
         selDavg, wFavg = avgarray(selDx, selDy, wfxcalP, wfycalP)
 
         axPD.errorbar(wP[selDavg], wDavg[selDavg], c='k', fmt='s', label='avg D sel', alpha=0.5)       
+    #    axPDB.errorbar(wP[selDavg], wDavg[selDavg], c='k', fmt='s', label='avg D sel', alpha=0.5)       
         axPk.errorbar(wP[selDavg], wkavg[selDavg], c='k', fmt='s', label='from D sel', alpha=0.5)       
         axPf.errorbar(wP[selDavg], wFavg[selDavg], c='k', fmt='s', label='from D sel', alpha=0.5)
+   #     axPfB.errorbar(wP[selDavg], wFavg[selDavg], c='k', fmt='s', label='from D sel', alpha=0.5)
         
    ###################  Recalculation of force based on D interval and max force  #############"    
 
+ #       if len(wFavg[selDavg])>=1:
         if len(wfxgP)>=1:
             wf = (wfxgP+wfygP)/2; wdf = (wdfxgP+wdfygP)  # wf = wFavg
             selLowF0 = (0 < wf) & (wf < MaxForce)
             wP_ = np.insert(wP[selLowF0].values, 0, 0)
             wFavg_ = np.insert(wf[selLowF0].values, 0, 0)
-            print(len(wP_), len(wFavg_))
             slopePf, interceptPf, r, p, se = linregress(wP_, wFavg_)
             wffit = slopePf*wP + interceptPf; wdffit = np.zeros(len(wffit))
-            wffit = wf; 
             if rapa: wffit = wf; wdffit = wdf
             selLowF = (wffit < MaxForce)
             axPf.errorbar(wP[selLowF], wffit[selLowF], c='r', fmt='-', label='fit', alpha=1)
@@ -1055,17 +1222,15 @@ if SelectMolecule:
    ###################  Plots as a function of Force  #############"    
   #      wfv = dfx['Force_pN']; wdfv = dfx['dForce_pN']
         wf = wffit; wdf = wdffit # np.zeros(len(wf))
-        wf = (wfxgP+wfygP)/2; wdf = (wdfxgP+wdfygP)
         
         wk = dfx['newkoff']
         wl = dfx['Length_calibration (nm)']; wdl = dfx['error of length']
         wlD = dfx['p1Lo_D']; wdlD = dfx['p2Lo_D']
         wlCcal = dfx['Cp1Lo_c']; wlcal = dfx['p1Lo_c']
-        'Cp1Lo_D'
-        'Cp1Lo_c'
         wa = dfx['Angle']; waC = dfx['AngleC']
         wlcc = dfx['Length_cyclic_close (nm)']; wdlcc = dfx['error of length_cyclic_close']
    #     wlP = dfx['Length_calibration (nm)']; wdlP = dfx['error of length']
+   #     wlP = dfx['Length_cyclic_close (nm)']; wdlP = dfx['error of length_cyclic_close']
         wnc = dfx['No Close']/dfx['Total cycles']
         wdk = dfx['newdkoff2AB']; # wdk = dfx['newdkoff']; 
         wk2A = dfx['newkoff2A']; wdk2A = dfx['newdkoff2A']
@@ -1166,6 +1331,9 @@ if SelectMolecule:
         wL0[ix]=pEqWLC[1] ; wdL0[ix]=np.sqrt(np.diag(pcovEqWLC))[1]**0.5
 
    ###################  Fits for Off-rates  #############"                           
+    #    sd = ( (wdk/wk/np.log(wk))**2 + (wdf/wf)**2 )**0.5
+
+    #    nonan = ~np.isnan(wf) * ~np.isnan(wk)
         kc = 0.5; #wft = np.logspace(np.log(0.1), np.log(15), num=30)
 
         if len(wFavg[selkoff])>=3:
@@ -1224,7 +1392,10 @@ if SelectMolecule:
             ax2.errorbar(wfB[ix], np.exp(wlogk0[ix]), dk0, wdfB[ix], c=c, label='ID='+str(x), fmt=symb, alpha=0.5)
             ax2.errorbar(wfBF[ix], np.exp(wlogk0F[ix]), dk0F, wdfBF[ix], c=c, fmt=symb, markerfacecolor='none', alpha=0.5)
             ax2Bis.errorbar(wxB[ix], np.exp(wlogk0[ix]), dk0, wdxB[ix], c=c, label='ID='+str(x), fmt=symb, markerfacecolor='none', alpha=0.5)
+     #       ax2Bis.errorbar(xBF, k0F, dk0F, dxBF, c=c, fmt=symb, markerfacecolor='none', alpha=0.5)
+       #     ax2Bis.errorbar(wxBp[ix], np.exp(wlogk0p[ix]), dk0p, wdxBp[ix], c=cFOV, label='ID='+str(x), fmt=symb, alpha=0.5)
             ax2Ter.errorbar(wxB[ix], wkx[ix], wdkx[ix], wdxB[ix], c=c, label='ID='+str(x), fmt=symb, alpha=0.5)
+     #       ax2Ter1.errorbar(xB, wlrange[ix], wdlrange[ix], dxB, c=c, label='ID='+str(x), fmt=symb, alpha=0.5)
             ax2Ter1.errorbar(wxB[ix], wlmax[ix], wdlmax[ix], wdxBp[ix], c=c, label='ID='+str(x), fmt=symb, alpha=0.5)
             ax2Ter2.errorbar(wfB[ix], wkz[ix], wdkz[ix], wdfB[ix], c=c, label='ID='+str(x), fmt=symb, alpha=0.5)
             ax2Ter3.errorbar(wkx[ix], wkz[ix], wdkz[ix], wdkx[ix], c=c, label='ID='+str(x), fmt=symb, alpha=0.5)
@@ -1239,9 +1410,9 @@ if SelectMolecule:
         axA.set_ylabel('Pulling Angle (deg)'); axA.set_ylim(0,60); axA.set_xlabel('Force')
         axNC.set_ylabel('No close fraction'); axNC.set_ylim(0,1)
         axFL.set_ylabel('Force Lumicks (pN)'); axFL.set_ylim(0,15)
-        axPf.set_ylabel('Force (pN)'); axPf.set_ylim(0,35)
+        axPf.set_ylabel('Force (pN)'); axPf.set_ylim(0,30)
         axPL.set_ylabel('Open JDNA length (nm)'); axPL.set_ylim(500,2000)
-        axPfB.set_ylabel('Force (pN)'); axPfB.set_ylim(0,35)
+        axPfB.set_ylabel('Force (pN)'); axPfB.set_ylim(0,30)
         axPk.set_ylabel('kx, ky (pN/nm)'); axPk.set_ylim(0,1.2e-2)
         axPkB.set_ylabel('kx, ky (pN/nm)'); axPkB.set_ylim(0,1.2e-2)
         axPkT.set_ylabel('kx, ky (pN/nm)'); axPkT.set_ylim(0,1.5e-2)
@@ -1287,7 +1458,7 @@ if SelectMolecule:
                 axBisi.text(0.5, 1e5, 'ID '+str(x)+' FOV '+str(wfov[ix]) , size=10)
             elif axBisi == axPL:
                 axBisi.text(0.5, 1500, 'ID '+str(x)+' FOV '+str(wfov[ix]) , size=10)
-            axBisi.set_xlabel('Force (pN)'); axBisi.set_xlim(0,35)
+            axBisi.set_xlabel('Force (pN)'); axBisi.set_xlim(0,30)
             if rapa: axBisi.set_xlim(0,25)
             if axBisi == axPf or axBisi == axPL or axBisi == axPfB or  axBisi == axPk or axBisi == axPkB or axBisi == axPkT or axBisi == axPD or axBisi == axPDB or axBisi == axPA or axBisi == axPP :
                 axBisi.set_xlabel('% High power'); axBisi.set_xlim(0, HighPowerMax)
@@ -1330,28 +1501,33 @@ if SelectMolecule:
             if x==1: axXY.legend()
             axXY.set_xlabel('X parameter'); axXY.set_ylabel('Y parameter')
 
-if rapa:
-    ymin = 700; ymax = 1000
-else:
-    ymin = 750; ymax = 1600
+if addgoldbead:
+    fresold = pEqold[1]*np.log(kres/pEqold[0]) if pEqold[0]!=0 else 0
+    print('Fitting Old Molec: k0=  %.6f' % pEqold[0],'+/-  %.6f' % eEqold[0],  ' f0= %.3f'% pEqold[1],'+/- %.3f' % eEqold[1], 'fres =%.3f' % fresold)
+    wlogk0 = np.append(wlogk0, np.log(k0old)); wdlogk0 = np.append(wlogk0, dk0old/k0old)
+    wfB = np.append(wfB, fBold); wdfB = np.append(wdfB, dfBold)
+    wxB = np.append(wxB, kBT/fBold); wdxB = np.append(wdxB, kBT*dfBold/fBold**2)
+    wfrange = np.append(wfrange, np.array(wfold).mean() ); wdfrange = np.append(wdfrange, np.array(wfold).std() )
+    wkx = np.append(wkx, 0 ); wdkx = np.append(wdkx, 0 ); wlmax = np.append(wlmax, dfstage_gold['Length (nm)'].max())
+    wkz = np.append(wkz, 0 ); wLp = np.append(wLp, 0 ); wL0 = np.append(wL0, 0 )
+    
+# ymin = min (np.min(dfstage['Rprecx']),  np.min(dfstage['Rprecy']))
+# ymax = max (np.max(dfstage['Rprecx']),  np.max(dfstage['Rprecy']))
+ymin = 750; ymax = 2100
 for xy in ['precx', 'precy', 'x', 'y']:   
     figname4a = 'RDiffusion'+xy; fig = plt.figure(figname4a, figsize=(max(ListMolec)*0.25,6), dpi=100); ax4a = plt.gca()
  #   sns.boxplot(x="Molecule ID", y='R'+xy, data=dfstage, ax=ax4a)
     ax4a.set_xlabel('Molecule ID')#    ax4a.set_xticklabels(ax4a.get_xticklabels(), rotation=90)
     ax4a.set_ylabel('Bead Radius deduced from Diffusion '+xy+' (nm)')
-    ax4a.set_ylim(ymin, ymax); #ax4a.set_xlim(0,max(ListMolec)+1)
-    ListMolec_str = [str(ID)  for ID in ListMolec]
-    ListRxy = [dfstage.loc[dfstage['Molecule ID'] == ID]['R'+xy].median()  for ID in ListMolec]
-    ListBeadR = [dfstage.loc[dfstage['Molecule ID'] == ID]['Bead radius (nm)'].median()  for ID in ListMolec]
- #   ax4a.scatter(dfstage['Molecule ID'], dfstage['R'+xy], c='k', marker='x', label='Measured')
-    ax4a.scatter(ListMolec_str, ListRxy, c='k', marker='x', label='Measured')
- #   ax4a.scatter(dfstage['Molecule ID'], dfstage['Bead radius (nm)'], c='r', marker='+', label="Nominal")
-    ax4a.scatter(ListMolec_str, ListBeadR, c='r', marker='+', label="Nominal")
+    ax4a.set_ylim(ymin, ymax); ax4a.set_xlim(0,max(ListMolec)+1)
+    ax4a.scatter(dfstage['Molecule ID'], dfstage['R'+xy], c='k', marker='x', label='Measured')
+    ax4a.scatter(dfstage['Molecule ID'], dfstage['Bead radius (nm)'], c='r', marker='+', label="Nominal")
     ax4a.legend(loc="upper right", fontsize=5)
     if SaveGraph: plt.tight_layout(); plt.savefig(outpath+figname4a, transparent=False)
 
+
 ax.set_xlabel('Force (pN)'); ax.set_ylabel('koff (1/s)'); ax.set_yscale('log')
-ax.set_ylim(1e-5,0.2); ax.set_xlim(0,35)
+ax.set_ylim(1e-5,0.2); ax.set_xlim(0,30)
 if rapa: ax.set_ylim(1e-2, 0.4); ax.set_xlim(0,25)
 
 nonan = ~np.isnan(wxB) * ~np.isnan(wlogk0)
@@ -1359,7 +1535,10 @@ if sum(nonan)>=2:
     pEq, pcovEq = curve_fit(Affine, wxB[nonan], wlogk0[nonan] - np.log(koffSPR), p0=[-1, 1])
     wxBfit = 0.05*(np.arange(100)+1)
     wlogk0_fit = Affine(wxBfit, pEq[0], pEq[1]) + np.log(koffSPR)
+    #ax2Bis.plot(wxBfit, np.exp(wlogk0_fit), linestyle='-.', c='k', label='Fit', alpha=0.5)
     (correl, p ) = pearsonr(wxB[nonan], wlogk0[nonan])
+    # wls_model = sm.WLS(wlogk0[nonan], wxB[nonan], weights=1/wdlogk0[nonan]**2)
+    # results = wls_model.fit()   # print(results.params)
     text2Bis = 'ln(koff°/koff_SPR) = '+"({:1.2f}".format(abs(pEq[1]))+"-xB)/{:1.2f}".format(abs(pEq[0]))+'\nCorrelation '+"{:1.2f}".format(correl)
     nonanF = ~np.isnan(wxBF) * ~np.isnan(wlogk0F)
     pEqF, pcovEqF = curve_fit(Affine, wxBF[nonanF], wlogk0F[nonanF] - np.log(koffSPR), p0=[-1, 1])
@@ -1424,6 +1603,7 @@ if SaveGraph: plt.figure(figRR); plt.savefig(outpath+figRR, transparent=False)
 if SaveGraph: plt.figure(figRR1); plt.savefig(outpath+figRR1, transparent=False)
 
 
+
 ##################    FORCE COMPARISON     ############################
 Fchoice = 'Ffit'  # 'Force_pN'
 if rapa:  
@@ -1439,20 +1619,50 @@ if rapa:
         axcol.legend(loc="upper right", fontsize=3); axcol.get_legend().remove()
         axcol.set_ylim(listymin[icol], listymax[icol])
         if SaveGraph: plt.savefig(outpath+fignamecol, transparent=False)
-
+# if False:
+#     ax3.plot(range(30), range(30), c='k',  linestyle='--')
+#     ax3.scatter(dFForceRapa[Force_Python_Sel], dFForceRapa['Force_Lumicks'], c='k', marker='x', label='Rapa')
+#     yL = dfstage['ForceLumicks_pN']
+#     xL = dfstage[Fchoice]
+#     inan = np.isnan(yL)+np.isnan(xL)
+#     xL = xL[~inan]
+#     yL = yL[~inan]
+#     if not True:#rapa:
+#         yL = pd.concat([dfstageForceOk['ForceLumicks_pN'],dFForceRapa['Force_Lumicks']], ignore_index=True )
+#         xL = pd.concat([dfstageForceOk['Force_pN'], dFForceRapa[Force_Python_Sel]], ignore_index=True )
+#     def Linear(x, *p): return x*p[0]
+#     pEq0, pcovEq0=curve_fit(Linear, xL[xL>0], yL[xL>0], p0=[2])
+#     yL_fit=Linear(xL[xL>0], pEq0[0])
+#     ax3.scatter(xL[xL>0], yL[xL>0], c='k', marker='x', alpha=0.5)
+#     ax3.plot(xL[xL>0], yL_fit, c='k', alpha=0.5)
+#     note3 = 'ForceLumicks_pN = '+ "%0.3f" % pEq0[0] + ' Force_pN'
+#     print(note3)
+#     ax3.annotate(note3, xy=(1, 1), xytext=(10,27))
+#     ax3.legend(fontsize=5); ax3.set_xlabel('Force (pN)'); ax3.set_ylabel('Force Lumicks (pN)')
+#     ax3.set_ylim(0,15); ax3.set_xlim(0,15)
+#     if SaveGraph: plt.figure(figname3); plt.savefig(outpath+figname3, transparent=False)
 
 ##################    POOL BY FORCE AND FITTING    ########################
 
 avgf=[]; avgk=[]; sdk=[]
-#listf = deltaf*(np.arange(int((MaxForce-5)/deltaf))+0.5)
+listf = deltaf*(np.arange(int((MaxForce-5)/deltaf))+0.5)
 listf = MinForce + deltaf*(np.arange(int((MaxForce-MinForce)/deltaf)))
 for f in listf:
     dfstagenonull = dfstage[~dfstage.isnull()]
     dfx = dfstage[ (dfstage[Fchoice]<f+deltaf/2) & (dfstage[Fchoice]>f-deltaf/2) & (dfstage['newkoff']).notnull() ]
     wf = dfx[Fchoice].values; wk = dfx['newkoff'].values
-    wf_ = wf.mean()
-    wk_ = np.exp((np.log(wk)).mean())
-    wdk_ = wk.std()
+    if addgoldbead:
+        ifo = (wfold<f+deltaf/2) * (wfold>f-deltaf/2)
+        wfo = np.array(wfold)[ifo]
+        woffo = np.array(woffold)[ifo]
+        #   print(f, wf, wk, wfo, woffo)
+        wf_ = np.append(wf, wfo).mean()
+        wk_ = np.exp(np.log(np.append(wk,woffo)).mean())
+        wdk_ = wk.std()
+    else:
+        wf_ = wf.mean()
+        wk_ = np.exp((np.log(wk)).mean())
+        wdk_ = wk.std()
     avgf.append(wf_); avgk.append(wk_); sdk.append(wdk_)
     print('f=',f, 'wf_=', wf_, 'wk_=', wk_)
 #(pEq, eEq, wlEq, res) = fitBellSingle(avgf, avgk)
@@ -1477,6 +1687,11 @@ for fignamei in [figname2, figname2Bis, figname2Ter, figname2Ter1, figname2Ter2,
                  'Force Lumicks', 'Power vs Force', 'Power_vs_Force_Bis', 'Deltaz vs Force', 'Deltaz vs Length', 'Power Stiffness', 'Power Stiffness Bis',
                  'Power_Stiffness_Ter', 'Power Friction', 'Power_Friction_Bis']:
     if SaveGraph: plt.figure(fignamei); plt.savefig(outpath+fignamei, transparent=False)
+###########################################################################
+if Domultiplots:
+    multiplots(df0, 'beadrenum', 'Phigh_%', 'FSpecx_pN', 'x_vs_power') #, 5, 5)
+    
+    multiplots(df0, 'beadrenum', 'FSpecx_pN', 'Offrate_s-1_1par', 'old_off_vs_force', ylogscale=True) #, 3, 0.1)
 
 
 df0.to_csv(outpath+'Compiled.csv')
