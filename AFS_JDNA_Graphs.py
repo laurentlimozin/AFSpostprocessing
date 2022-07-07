@@ -146,7 +146,8 @@ def SingleTrace(refname, d0, n,m, X,Y,Z,T, MinLUT, SaveGraph, outname, OutFormat
 
 def MakeDisplayCloseOpen(refname, Tclosed, Zsclosed, Topen, Zsopen, Tl, Zsl, T, Zsavg, P, Tup, SaveGraph, CloseAfterSave, outname, OutFormat, top=False):               
     figname=refname+'XY_'+'TZclosedopen'
-    fig = plt.figure(figname, figsize=(6,6), dpi=100)
+  #  fig = plt.figure(figname, figsize=(8,6), dpi=100)
+    fig = plt.figure(figname, figsize=(15,4), dpi=100)
     if top:
         spec = fig.add_gridspec(ncols=1, nrows=2, width_ratios=[1], height_ratios=[1, 0.2])
         ax = fig.add_subplot( spec[0, 0]); ax2 = fig.add_subplot( spec[1, 0])
@@ -158,17 +159,17 @@ def MakeDisplayCloseOpen(refname, Tclosed, Zsclosed, Topen, Zsopen, Tl, Zsl, T, 
     ax.scatter(Tl/timescale, Zsl, marker='.', alpha=0.2, label='Zsl')
     ax.plot(T/timescale, Zsavg, c='m', alpha=0.5, label='Zsavg')
     ax2.plot(T/timescale, P, c='k', alpha=0.3, label='P'), ax2.legend(fontsize=6); 
-    ax.legend(fontsize=6); ax.axis([0, T[-1]/timescale, -100, 2000])
+ #   ax.legend(fontsize=6); ax.axis([0, T[-1]/timescale, -100, 1100])
+    ax.axis([0, 250, -100, 1000])   # modifs for final graph article
+  #  ax.axis([174.2, 181, -100, 1000])   # modifs for final graph article
     if top:
         ax2.set_xlabel("Time (min)"); ax2.set_xlim(ax.get_xlim())
     else: 
         ax.set_xlabel("Time (min)")
     ax.set_ylabel("Height (nm)"); ax2.set_ylabel("Power (%)")
-    for ic, tic in enumerate(Tup):
-        #print(ic, tic)
-        plt.text((tic+0.3e5)/timescale, np.amax(P)*0.8 , str(ic), fontsize=10)
-#        for j in range(10): plt.text(tic, j, str(ic), fontsize=10)
-    if SaveGraph: plt.savefig(outname+figname+OutFormat, transparent=True)
+    plt.tight_layout()
+ #   for ic, tic in enumerate(Tup): plt.text((tic+0.3e5)/timescale, np.amax(P)*0.8 , str(ic), fontsize=10)
+    if SaveGraph: plt.savefig(outname+figname+OutFormat, transparent=False)
     if CloseAfterSave: plt.close()
 
 def MakeGraphTZ_Power(refname, Tup, Zuplow, Zupmid, Zuphigh, Dup, T, P, SaveGraph, outname, OutFormat):

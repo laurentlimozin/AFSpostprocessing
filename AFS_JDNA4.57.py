@@ -124,6 +124,9 @@ import sys
 import ast
 #import dataframe_image as dfi ; dfi.export(df, 'dataframe.png')
 
+fontsizelarge = 14
+plt.rc('font', size=fontsizelarge)
+
 warnings.filterwarnings("ignore")
 np.random.seed(444); plt.close('all')
 #def pfl(f): return '{:.2E}'.format(f)
@@ -171,6 +174,7 @@ tdmsfilename="20210929-005129"
 tdmsfilename="20211008-205604"
 tdmsfilename="20211001-184602"
 #tdmsfilename="20211007-130743"
+tdmsfilename="20200824-201201"
 
 OutputFolder='Outputtest/'
 if not os.path.exists(path1+OutputFolder): os.makedirs(path1+OutputFolder)
@@ -664,7 +668,7 @@ def survival(Tupjump_Tuphigh, TEhigh, countNoOpen, shift, refname, color, export
         figname=refname+'Survival'
         plt.figure(figname, figsize=(6,6), dpi=100); ax = plt.gca()
         ax.scatter(dur2s, dur2s_y, c=color, marker='o', alpha=0.5, label=refname)
-        ax.set_xlabel("Time (s)");  ax.set_ylabel("Survival Fraction")
+        ax.set_xlabel("Duration of closed state $\Delta$t (s)");  ax.set_ylabel("Survival Fraction")
         ax.axis([0., TEhigh/1000., 0.01, 1.]); ax.set_yscale('log')
     maxtfit=0.95*TEhigh/1000-shift
     x2 = dur2s[dur2s<maxtfit]
@@ -695,10 +699,11 @@ def survival(Tupjump_Tuphigh, TEhigh, countNoOpen, shift, refname, color, export
             break
     y2_fit=FitExp1(x2, pEq[0], pEq[1])
     if DisplaySurvival:
-        ax.plot(x2, y2_fit, c='r',alpha=0.5, label='kd 2param fit='+"%.6f" % (1/pEq[0]))   
+   #     ax.plot(x2, y2_fit, c='r',alpha=0.5, label='kd 2param fit='+"%.6f" % (1/pEq[0]))   
         ax.plot(x2, y2_fit0, c='k',alpha=0.5, label='kd 1param fit='+"%.6f" % (1/pEq0[0]))
-        ax.legend(fontsize=6)
-        if SaveGraph: plt.savefig(path1+OutputFolder+figname+OutFormat, transparent=True)
+   #     ax.legend(fontsize=6)
+        plt.tight_layout()
+        if SaveGraph: plt.savefig(path1+OutputFolder+figname+OutFormat, transparent=False)
     if exportname!=None: exportsurvival(Tupjump_Tuphigh, exportname+'.csv')
 
     print('Survival 1param fit 0-', maxtfit, 's: offrate=', '{:.2E}'.format(1/pEq0[0]), '+/-', '{:.2E}'.format(np.sqrt(pcovEq0[0][0])/pEq0[0]**2) , 'tau (s)=', '{:.2E}'.format(pEq0[0]))
