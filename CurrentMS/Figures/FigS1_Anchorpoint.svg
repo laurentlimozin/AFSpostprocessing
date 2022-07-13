@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="FigS2_Anchorpoint.svg"
+   inkscape:export-filename="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/FigS2_Anchorpoint.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="489.71426"
+     inkscape:cy="185.07296"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1853"
+     inkscape:window-height="1025"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/LengthCalculation (copie).png"
+       xlink:href="LengthCalculation (copie).png"
+       width="209.55"
+       height="140.05276"
+       preserveAspectRatio="none"
+       id="image38"
+       x="-304.34644"
+       y="18.330757" />
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/AnchorPoint (copie).png"
+       xlink:href="AnchorPoint (copie).png"
+       width="219.85112"
+       height="110.34889"
+       preserveAspectRatio="none"
+       id="image49"
+       x="-70.616028"
+       y="33.938652" />
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/AnchorPointZ (copie).png"
+       xlink:href="AnchorPointZ (copie).png"
+       width="132.11526"
+       height="121.74361"
+       preserveAspectRatio="none"
+       id="image60"
+       x="193.23404"
+       y="29.753197" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:17.63888931px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-302.8345"
+       y="35.717659"
+       id="text65"><tspan
+         sodipodi:role="line"
+         id="tspan63"
+         x="-302.8345"
+         y="35.717659"
+         style="stroke-width:0.26458332">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:17.63888931px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-70.284828"
+       y="35.519882"
+       id="text65-3"><tspan
+         sodipodi:role="line"
+         id="tspan63-6"
+         x="-70.284828"
+         y="35.519882"
+         style="stroke-width:0.26458332">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:17.63888931px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="187.38347"
+       y="37.485367"
+       id="text65-3-7"><tspan
+         sodipodi:role="line"
+         id="tspan63-6-5"
+         x="187.38347"
+         y="37.485367"
+         style="stroke-width:0.26458332">C</tspan></text>
+  </g>
+</svg>

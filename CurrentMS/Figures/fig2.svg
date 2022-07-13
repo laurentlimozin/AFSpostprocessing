@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="fig2.svg"
+   inkscape:export-filename="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/fig2.png"
+   inkscape:export-xdpi="300.5"
+   inkscape:export-ydpi="300.5">
+  <defs
+     id="defs2">
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path995"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;"
+       inkscape:isstock="true">
+      <path
+         id="path998"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1;fill:#000000;fill-opacity:1"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="58.543235"
+     inkscape:cy="-385.76822"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1670"
+     inkscape:window-height="968"
+     inkscape:window-x="156"
+     inkscape:window-y="82"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/20200824-201201_Bead18_XY_TZclosedopen.png"
+       xlink:href="20200824-201201_Bead18_XY_TZclosedopen.png"
+       style="stroke:#270b00;stroke-opacity:1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
+       width="381"
+       height="101.6"
+       preserveAspectRatio="none"
+       id="image823"
+       x="-137.73537"
+       y="1.7841215" />
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/20200824-201201_Bead18_Mask_CycleSurvival.png"
+       xlink:href="20200824-201201_Bead18_Mask_CycleSurvival.png"
+       width="152.39999"
+       height="152.39999"
+       preserveAspectRatio="none"
+       id="image834"
+       x="90.864639"
+       y="102.32578" />
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/20200824-201201_Bead18_XY_TZclosedopen_zoom.png"
+       xlink:href="20200824-201201_Bead18_XY_TZclosedopen_zoom.png"
+       width="203.2"
+       height="152.39999"
+       preserveAspectRatio="none"
+       id="image845"
+       x="-132.4437"
+       y="100.20912" />
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#270c00;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:1.5, 0.50000000000000000;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect867"
+       width="9.009119"
+       height="50.550621"
+       x="128.85585"
+       y="9.5509539" />
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/Spectrum_test13_Rapa.png"
+       xlink:href="Spectrum_test13_Rapa.png"
+       width="152.39999"
+       height="152.39999"
+       preserveAspectRatio="none"
+       id="image877"
+       x="-121.86037"
+       y="255.78412" />
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/Spectrum_test35_Rapa.png"
+       xlink:href="Spectrum_test35_Rapa.png"
+       width="152.39999"
+       height="152.39999"
+       preserveAspectRatio="none"
+       id="image888"
+       x="81.33963"
+       y="255.78412" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.26647663px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 128.85647,9.5502806 C -105.078,107.63461 -105.078,107.63461 -105.078,107.63461"
+       id="path893"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.27966103px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 137.85678,9.5564088 C 60.484388,108.00645 60.484388,108.00645 60.484388,108.00645"
+       id="path895"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.28246436px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 137.85344,60.107456 C 60.487728,201.74411 60.487728,201.74411 60.487728,201.74411"
+       id="path897"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.11111069px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-137.12"
+       y="8.5876932"
+       id="text915"><tspan
+         sodipodi:role="line"
+         id="tspan913"
+         x="-137.12"
+         y="8.5876932"
+         style="stroke-width:0.26458332">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.11111069px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-137.33014"
+       y="115.42328"
+       id="text915-8"><tspan
+         sodipodi:role="line"
+         id="tspan913-6"
+         x="-137.33014"
+         y="115.42328"
+         style="stroke-width:0.26458332">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.11111069px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-138.00539"
+       y="267.74771"
+       id="text915-0"><tspan
+         sodipodi:role="line"
+         id="tspan913-4"
+         x="-138.00539"
+         y="267.74771"
+         style="stroke-width:0.26458332">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.11111069px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="73.795914"
+       y="267.74768"
+       id="text915-0-8"><tspan
+         sodipodi:role="line"
+         id="tspan913-4-8"
+         x="73.795914"
+         y="267.74768"
+         style="stroke-width:0.26458332">E</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.11111069px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="92.694717"
+       y="115.42328"
+       id="text915-0-89"><tspan
+         sodipodi:role="line"
+         id="tspan913-4-7"
+         x="92.694717"
+         y="115.42328"
+         style="stroke-width:0.26458332">C</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#Arrow1Lend);marker-start:url(#Arrow1Lstart)"
+       d="m 9.0714284,126.15476 c 21.3556546,0 21.3556546,0 21.3556546,0"
+       id="path993"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.79374995, 0.26458332;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 8.8068451,120.6741 c 0,12.66221 0,12.66221 0,12.66221"
+       id="path1291"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="14.699823"
+       y="123.80934"
+       id="text1295"><tspan
+         sodipodi:role="line"
+         id="tspan1293"
+         x="14.699823"
+         y="123.80934"
+         style="stroke-width:0.26458332">Δt</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.11111069px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="-136.63768"
+       y="426.11951"
+       id="text915-0-3"><tspan
+         sodipodi:role="line"
+         id="tspan913-4-6"
+         x="-136.63768"
+         y="426.11951"
+         style="stroke-width:0.26458332">F</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.11111069px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="74.388474"
+       y="426.11948"
+       id="text915-0-8-7"><tspan
+         sodipodi:role="line"
+         id="tspan913-4-8-5"
+         x="74.388474"
+         y="426.11948"
+         style="stroke-width:0.26458332">G</tspan></text>
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/Force_test.png"
+       xlink:href="Force_test.png"
+       width="152.39999"
+       height="152.39999"
+       preserveAspectRatio="none"
+       id="image63"
+       x="-113.12072"
+       y="398.05203" />
+    <image
+       sodipodi:absref="/home/laurent/DATA/Redaction/AFS-JDNA/Figures/Angle_test.png"
+       xlink:href="Angle_test.png"
+       width="152.39999"
+       height="152.39999"
+       preserveAspectRatio="none"
+       id="image85"
+       x="89.163277"
+       y="397.51749" />
+  </g>
+</svg>
