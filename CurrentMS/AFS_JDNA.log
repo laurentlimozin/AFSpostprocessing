@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.3.9)  13 JUL 2022 18:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.3.9)  21 JUL 2022 19:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1401,262 +1401,253 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 11.39996pt on input line 67.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 7.59998pt on input line 112.
+(Font)              scaled to size 7.59998pt on input line 72.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <8> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 112.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 72.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 7.59998pt on input line 112.
+(Font)              scaled to size 7.59998pt on input line 72.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 131.
-
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 91.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 131.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 91.
  [2] [3]
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-Underfull \hbox (badness 10000) in paragraph at lines 186--188
+Underfull \hbox (badness 10000) in paragraph at lines 146--148
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 189--191
+Underfull \hbox (badness 10000) in paragraph at lines 149--151
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 192--193
+Underfull \hbox (badness 10000) in paragraph at lines 152--153
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 225--228
+Underfull \hbox (badness 10000) in paragraph at lines 176--179
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 229--232
+Underfull \hbox (badness 10000) in paragraph at lines 180--183
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 233--234
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
 
  []
 
 [5]
-<Figures/fig1.png, id=183, 1254.8481pt x 517.935pt>
+<Figures/fig1.png, id=186, 1515.5019pt x 970.3452pt>
 File: Figures/fig1.png Graphic file (type png)
 <use Figures/fig1.png>
-Package pdftex.def Info: Figures/fig1.png  used on input line 328.
-(pdftex.def)             Requested size: 499.20007pt x 206.04018pt.
+Package pdftex.def Info: Figures/fig1.png  used on input line 232.
+(pdftex.def)             Requested size: 374.40005pt x 239.71329pt.
  [6 <./Figures/fig1.png>]
-<Figures/fig2.png, id=200, 1084.05pt x 1570.9089pt>
+<Figures/fig2.png, id=210, 2136.783pt x 852.0633pt>
 File: Figures/fig2.png Graphic file (type png)
 <use Figures/fig2.png>
-Package pdftex.def Info: Figures/fig2.png  used on input line 347.
-(pdftex.def)             Requested size: 374.40005pt x 542.53944pt.
- [7]
-<Figures/offrate_vs_force_Rapa.png, id=232, 433.62pt x 433.62pt>
-File: Figures/offrate_vs_force_Rapa.png Graphic file (type png)
-<use Figures/offrate_vs_force_Rapa.png>
-Package pdftex.def Info: Figures/offrate_vs_force_Rapa.png  used on input line 
-393.
-(pdftex.def)             Requested size: 224.6385pt x 224.6434pt.
-<Figures/koff0_vs_xBeta_Rapa.png, id=234, 433.62pt x 433.62pt>
-File: Figures/koff0_vs_xBeta_Rapa.png Graphic file (type png)
-<use Figures/koff0_vs_xBeta_Rapa.png>
-Package pdftex.def Info: Figures/koff0_vs_xBeta_Rapa.png  used on input line 39
-4.
-(pdftex.def)             Requested size: 224.6385pt x 224.6434pt.
-<Figures/offrate_vs_force_Nef.png, id=252, 433.62pt x 433.62pt>
+Package pdftex.def Info: Figures/fig2.png  used on input line 247.
+(pdftex.def)             Requested size: 499.20007pt x 199.05177pt.
+ [7 <./Figures/fig2.png>]
+<Figures/fig3.png, id=239, 866.2764pt x 433.1382pt>
+File: Figures/fig3.png Graphic file (type png)
+<use Figures/fig3.png>
+Package pdftex.def Info: Figures/fig3.png  used on input line 302.
+(pdftex.def)             Requested size: 374.40005pt x 187.20412pt.
+ [8]
+<Figures/offrate_vs_force_Nef.png, id=271, 433.62pt x 433.62pt>
 File: Figures/offrate_vs_force_Nef.png Graphic file (type png)
 <use Figures/offrate_vs_force_Nef.png>
-Package pdftex.def Info: Figures/offrate_vs_force_Nef.png  used on input line 4
-08.
+Package pdftex.def Info: Figures/offrate_vs_force_Nef.png  used on input line 3
+17.
 (pdftex.def)             Requested size: 199.67697pt x 199.67935pt.
- [8] [9 <./Figures/fig2.png>] [10 <./Figures/offrate_vs_force_Rapa.png> <./Figu
-res/koff0_vs_xBeta_Rapa.png> <./Figures/offrate_vs_force_Nef.png>] (./AFS_JDNA.
-bbl [11
+ [9 <./Figures/fig3.png>] [10 <./Figures/offrate_vs_force_Nef.png>] (./AFS_JDNA
+.bbl [11] [12]
+[13]) [14]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 436.
 
-] [12] [13]) [14]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 523.
-
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<Figures/TableS1pdf.png, id=323, 1132.23pt x 263.98625pt>
-File: Figures/TableS1pdf.png Graphic file (type png)
-<use Figures/TableS1pdf.png>
-Package pdftex.def Info: Figures/TableS1pdf.png  used on input line 548.
-(pdftex.def)             Requested size: 499.20007pt x 116.39195pt.
+<Figures/TableS1.png, id=338, 1297.84875pt x 224.84pt>
+File: Figures/TableS1.png Graphic file (type png)
+<use Figures/TableS1.png>
+Package pdftex.def Info: Figures/TableS1.png  used on input line 461.
+(pdftex.def)             Requested size: 499.20007pt x 86.4796pt.
 
-
-Package natbib Warning: Citation `bustamante1994 ' on page 15 undefined on inpu
-t line 553.
-
-<Figures/TableS2pdf.png, id=327, 1141.26375pt x 231.86626pt>
-File: Figures/TableS2pdf.png Graphic file (type png)
-<use Figures/TableS2pdf.png>
-Package pdftex.def Info: Figures/TableS2pdf.png  used on input line 558.
-(pdftex.def)             Requested size: 499.20007pt x 101.42pt.
-<Figures/TableS3pdf.png, id=328, 1139.25626pt x 768.8725pt>
-File: Figures/TableS3pdf.png Graphic file (type png)
-<use Figures/TableS3pdf.png>
-Package pdftex.def Info: Figures/TableS3pdf.png  used on input line 565.
-(pdftex.def)             Requested size: 499.20007pt x 336.8971pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 568--577
+Underfull \hbox (badness 10000) in paragraph at lines 464--467
 
  []
 
-[15 <./Figures/TableS1pdf.png> <./Figures/TableS2pdf.png>] [16 <./Figures/Table
-S3pdf.png>]
-<Figures/TableS4pdf.png, id=344, 1142.2675pt x 482.80376pt>
-File: Figures/TableS4pdf.png Graphic file (type png)
-<use Figures/TableS4pdf.png>
-Package pdftex.def Info: Figures/TableS4pdf.png  used on input line 583.
-(pdftex.def)             Requested size: 499.20007pt x 210.99774pt.
-<Figures/figS1.png, id=345, 1158.2472pt x 302.0886pt>
-File: Figures/figS1.png Graphic file (type png)
-<use Figures/figS1.png>
-Package pdftex.def Info: Figures/figS1.png  used on input line 599.
-(pdftex.def)             Requested size: 499.20007pt x 130.19978pt.
-<Figures/Fig_calibration on the fly.png, id=348, 771.1209pt x 590.4459pt>
+<Figures/TableS2pdf.png, id=339, 1141.26375pt x 231.86626pt>
+File: Figures/TableS2pdf.png Graphic file (type png)
+<use Figures/TableS2pdf.png>
+Package pdftex.def Info: Figures/TableS2pdf.png  used on input line 471.
+(pdftex.def)             Requested size: 499.20007pt x 101.42pt.
+[15 <./Figures/TableS1.png> <./Figures/TableS2pdf.png>]
+<Figures/TableS3.png, id=349, 1432.35126pt x 829.0975pt>
+File: Figures/TableS3.png Graphic file (type png)
+<use Figures/TableS3.png>
+Package pdftex.def Info: Figures/TableS3.png  used on input line 480.
+(pdftex.def)             Requested size: 499.20007pt x 288.94867pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 483--495
+
+ []
+
+[16 <./Figures/TableS3.png>]
+<Figures/TableS4.png, id=358, 1514.65875pt x 650.43pt>
+File: Figures/TableS4.png Graphic file (type png)
+<use Figures/TableS4.png>
+Package pdftex.def Info: Figures/TableS4.png  used on input line 501.
+(pdftex.def)             Requested size: 499.20007pt x 214.36467pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 503--508
+
+ []
+
+[17 <./Figures/TableS4.png>]
+<Figures/220718_FigS1_CG.png, id=365, 2102.5752pt x 1583.1948pt>
+File: Figures/220718_FigS1_CG.png Graphic file (type png)
+<use Figures/220718_FigS1_CG.png>
+Package pdftex.def Info: Figures/220718_FigS1_CG.png  used on input line 518.
+(pdftex.def)             Requested size: 499.20007pt x 375.86772pt.
+<Figures/figS2.png, id=366, 1313.26636pt x 361.22955pt>
+File: Figures/figS2.png Graphic file (type png)
+<use Figures/figS2.png>
+Package pdftex.def Info: Figures/figS2.png  used on input line 528.
+(pdftex.def)             Requested size: 499.20007pt x 137.30722pt.
+<Figures/multispectrumx_Rapa.png, id=369, 1734.48pt x 975.645pt>
+File: Figures/multispectrumx_Rapa.png Graphic file (type png)
+<use Figures/multispectrumx_Rapa.png>
+Package pdftex.def Info: Figures/multispectrumx_Rapa.png  used on input line 55
+0.
+(pdftex.def)             Requested size: 658.20007pt x 370.2428pt.
+<Figures/multispectrumy_Rapa.png, id=372, 1734.48pt x 975.645pt>
+File: Figures/multispectrumy_Rapa.png Graphic file (type png)
+<use Figures/multispectrumy_Rapa.png>
+Package pdftex.def Info: Figures/multispectrumy_Rapa.png  used on input line 55
+9.
+(pdftex.def)             Requested size: 658.20007pt x 370.2428pt.
+<Figures/multispectrumy_Nef.png, id=375, 650.43pt x 650.43pt>
+File: Figures/multispectrumy_Nef.png Graphic file (type png)
+<use Figures/multispectrumy_Nef.png>
+Package pdftex.def Info: Figures/multispectrumy_Nef.png  used on input line 566
+.
+(pdftex.def)             Requested size: 374.40005pt x 374.41118pt.
+<Figures/Fig_calibration on the fly.png, id=378, 771.1209pt x 590.4459pt>
 File: Figures/Fig_calibration on the fly.png Graphic file (type png)
 <use Figures/Fig_calibration on the fly.png>
 Package pdftex.def Info: Figures/Fig_calibration on the fly.png  used on input 
-line 608.
+line 574.
 (pdftex.def)             Requested size: 399.36157pt x 305.79933pt.
-<Figures/Power_Angles_Rapa.png, id=349, 1339.1631pt x 712.5822pt>
-File: Figures/Power_Angles_Rapa.png Graphic file (type png)
-<use Figures/Power_Angles_Rapa.png>
-Package pdftex.def Info: Figures/Power_Angles_Rapa.png  used on input line 615.
-
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/multispectrumx_Rapa.png, id=350, 1339.1631pt x 712.5822pt>
-File: Figures/multispectrumx_Rapa.png Graphic file (type png)
-<use Figures/multispectrumx_Rapa.png>
-Package pdftex.def Info: Figures/multispectrumx_Rapa.png  used on input line 62
-9.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/multispectrumy_Rapa.png, id=353, 1339.1631pt x 712.5822pt>
-File: Figures/multispectrumy_Rapa.png Graphic file (type png)
-<use Figures/multispectrumy_Rapa.png>
-Package pdftex.def Info: Figures/multispectrumy_Rapa.png  used on input line 63
-8.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/multispectrumy_Nef.png, id=356, 1734.48pt x 975.645pt>
-File: Figures/multispectrumy_Nef.png Graphic file (type png)
-<use Figures/multispectrumy_Nef.png>
-Package pdftex.def Info: Figures/multispectrumy_Nef.png  used on input line 645
-.
-(pdftex.def)             Requested size: 499.20007pt x 280.80095pt.
-<Figures/Power_Stiffness_Ter_Rapa.png, id=359, 1339.1631pt x 712.5822pt>
+<Figures/Power_Stiffness_Ter_Rapa.png, id=379, 1517.67pt x 650.43pt>
 File: Figures/Power_Stiffness_Ter_Rapa.png Graphic file (type png)
 <use Figures/Power_Stiffness_Ter_Rapa.png>
 Package pdftex.def Info: Figures/Power_Stiffness_Ter_Rapa.png  used on input li
-ne 653.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/Power_Friction_Bis_Rapa.png, id=360, 1339.1631pt x 712.5822pt>
+ne 581.
+(pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
+<Figures/fig_Radius.png, id=380, 467.1051pt x 222.8325pt>
+File: Figures/fig_Radius.png Graphic file (type png)
+<use Figures/fig_Radius.png>
+Package pdftex.def Info: Figures/fig_Radius.png  used on input line 589.
+(pdftex.def)             Requested size: 299.52309pt x 142.88773pt.
+<Figures/Power_Friction_Bis_Rapa.png, id=381, 1517.67pt x 650.43pt>
 File: Figures/Power_Friction_Bis_Rapa.png Graphic file (type png)
 <use Figures/Power_Friction_Bis_Rapa.png>
 Package pdftex.def Info: Figures/Power_Friction_Bis_Rapa.png  used on input lin
-e 660.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/fig_Radius.png, id=361, 467.1051pt x 222.8325pt>
-File: Figures/fig_Radius.png Graphic file (type png)
-<use Figures/fig_Radius.png>
-Package pdftex.def Info: Figures/fig_Radius.png  used on input line 669.
-(pdftex.def)             Requested size: 299.52309pt x 142.88773pt.
-<Figures/Force_Lengths_Bis_Rapa.png, id=362, 1339.1631pt x 712.5822pt>
+e 596.
+(pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
+<Figures/Force_Lengths_Bis_Rapa.png, id=382, 1517.67pt x 650.43pt>
 File: Figures/Force_Lengths_Bis_Rapa.png Graphic file (type png)
 <use Figures/Force_Lengths_Bis_Rapa.png>
 Package pdftex.def Info: Figures/Force_Lengths_Bis_Rapa.png  used on input line
- 710.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/fig_WLC_FJC.png, id=367, 880.7304pt x 462.2871pt>
+ 637.
+(pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
+<Figures/fig_WLC_FJC.png, id=383, 880.7304pt x 462.2871pt>
 File: Figures/fig_WLC_FJC.png Graphic file (type png)
 <use Figures/fig_WLC_FJC.png>
-Package pdftex.def Info: Figures/fig_WLC_FJC.png  used on input line 721.
+Package pdftex.def Info: Figures/fig_WLC_FJC.png  used on input line 648.
 (pdftex.def)             Requested size: 499.20007pt x 262.02504pt.
-<Figures/multihistodzjump_Rapa.png, id=368, 1339.1631pt x 712.5822pt>
-File: Figures/multihistodzjump_Rapa.png Graphic file (type png)
-<use Figures/multihistodzjump_Rapa.png>
-Package pdftex.def Info: Figures/multihistodzjump_Rapa.png  used on input line 
-728.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/multisurvival2Bis_Rapa.png, id=369, 1339.1631pt x 712.5822pt>
+<Figures/multisurvival2Bis_Rapa.png, id=384, 1734.48pt x 975.645pt>
 File: Figures/multisurvival2Bis_Rapa.png Graphic file (type png)
 <use Figures/multisurvival2Bis_Rapa.png>
 Package pdftex.def Info: Figures/multisurvival2Bis_Rapa.png  used on input line
- 743.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/offrate_vs_forceBis_Rapa.png, id=370, 1339.1631pt x 712.5822pt>
+ 670.
+(pdftex.def)             Requested size: 658.20007pt x 370.2428pt.
+<Figures/offrate_vs_forceBis_Rapa.png, id=385, 1517.67pt x 650.43pt>
 File: Figures/offrate_vs_forceBis_Rapa.png Graphic file (type png)
 <use Figures/offrate_vs_forceBis_Rapa.png>
 Package pdftex.def Info: Figures/offrate_vs_forceBis_Rapa.png  used on input li
-ne 750.
-(pdftex.def)             Requested size: 658.20007pt x 350.2339pt.
-<Figures/Power_vs_Force_Bis_Nef.png, id=371, 1734.48pt x 975.645pt>
+ne 677.
+(pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
+<Figures/Power_vs_Force_Bis_Nef.png, id=386, 650.43pt x 650.43pt>
 File: Figures/Power_vs_Force_Bis_Nef.png Graphic file (type png)
 <use Figures/Power_vs_Force_Bis_Nef.png>
 Package pdftex.def Info: Figures/Power_vs_Force_Bis_Nef.png  used on input line
- 757.
-(pdftex.def)             Requested size: 499.20007pt x 280.80095pt.
-<Figures/multisurvival2Bis_Nef.png, id=372, 1734.48pt x 975.645pt>
+ 684.
+(pdftex.def)             Requested size: 374.40005pt x 374.41118pt.
+<Figures/multisurvival2Bis_Nef.png, id=387, 650.43pt x 650.43pt>
 File: Figures/multisurvival2Bis_Nef.png Graphic file (type png)
 <use Figures/multisurvival2Bis_Nef.png>
 Package pdftex.def Info: Figures/multisurvival2Bis_Nef.png  used on input line 
-764.
-(pdftex.def)             Requested size: 499.20007pt x 280.80095pt.
-<Figures/Maturation_Rapa.png, id=373, 433.62pt x 433.62pt>
+691.
+(pdftex.def)             Requested size: 374.40005pt x 374.41118pt.
+<Figures/Maturation_Rapa.png, id=388, 433.62pt x 433.62pt>
 File: Figures/Maturation_Rapa.png Graphic file (type png)
 <use Figures/Maturation_Rapa.png>
-Package pdftex.def Info: Figures/Maturation_Rapa.png  used on input line 771.
-(pdftex.def)             Requested size: 199.67697pt x 199.67935pt.
+Package pdftex.def Info: Figures/Maturation_Rapa.png  used on input line 698.
+(pdftex.def)             Requested size: 299.52309pt x 299.53557pt.
+ [18 <./Figures/220718_FigS1_CG.png>] [19 <./Figures/figS2.png>] [20 <./Figures
+/multispectrumx_Rapa.png>] [21 <./Figures/multispectrumy_Rapa.png>] [22 <./Figu
+res/multispectrumy_Nef.png>] [23 <./Figures/Fig_calibration on the fly.png>] [2
+4 <./Figures/Power_Stiffness_Ter_Rapa.png>]
+[25 <./Figures/fig_Radius.png>] [26 <./Figures/Power_Friction_Bis_Rapa.png>]
+[27 <./Figures/Force_Lengths_Bis_Rapa.png>] [28 <./Figures/fig_WLC_FJC.png>]
+[29 <./Figures/multisurvival2Bis_Rapa.png>] [30 <./Figures/offrate_vs_forceBis_
+Rapa.png>] [31 <./Figures/Power_vs_Force_Bis_Nef.png>] [32 <./Figures/multisurv
+ival2Bis_Nef.png>] [33 <./Figures/Maturation_Rapa.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 790--812
 
+ []
 
-Package natbib Warning: There were undefined citations.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 813.
+[34
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 857.
-[17 <./Figures/TableS4pdf.png> <./Figures/figS1.png>] [18 <./Figures/Fig_calibr
-ation on the fly.png>] [19 <./Figures/Power_Angles_Rapa.png>] [20 <./Figures/mu
-ltispectrumx_Rapa.png>] [21 <./Figures/multispectrumy_Rapa.png>] [22 <./Figures
-/multispectrumy_Nef.png>] [23 <./Figures/Power_Stiffness_Ter_Rapa.png>]
-[24 <./Figures/Power_Friction_Bis_Rapa.png>] [25 <./Figures/fig_Radius.png>]
-[26 <./Figures/Force_Lengths_Bis_Rapa.png>] [27 <./Figures/fig_WLC_FJC.png>]
-[28 <./Figures/multihistodzjump_Rapa.png>] [29 <./Figures/multisurvival2Bis_Rap
-a.png>] [30 <./Figures/offrate_vs_forceBis_Rapa.png>] [31 <./Figures/Power_vs_F
-orce_Bis_Nef.png> <./Figures/multisurvival2Bis_Nef.png>] [32 <./Figures/Maturat
-ion_Rapa.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 857.
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 813.
  (./AFS_JDNA.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 857.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 857.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 813.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 813.
 Package rerunfilecheck Info: File `AFS_JDNA.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 21435 strings out of 494821
- 372538 string characters out of 6177892
- 602557 words of memory out of 5000000
- 24141 multiletter control sequences out of 15000+600000
- 601813 words of font info for 235 fonts, out of 8000000 for 9000
+ 21420 strings out of 494821
+ 372049 string characters out of 6177892
+ 600089 words of memory out of 5000000
+ 24129 multiletter control sequences out of 15000+600000
+ 600105 words of font info for 232 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 43i,12n,67p,10412b,541s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,15n,67p,10412b,555s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/laurent/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.6
 00pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
@@ -1670,10 +1661,10 @@ re/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mri8a.pfb>
-Output written on AFS_JDNA.pdf (32 pages, 14906335 bytes).
+Output written on AFS_JDNA.pdf (34 pages, 26180841 bytes).
 PDF statistics:
- 552 PDF objects out of 1000 (max. 8388607)
- 427 compressed objects within 5 object streams
+ 561 PDF objects out of 1000 (max. 8388607)
+ 443 compressed objects within 5 object streams
  129 named destinations out of 1000 (max. 500000)
- 35459 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 35449 words of extra memory for PDF output out of 35830 (max. 10000000)
 

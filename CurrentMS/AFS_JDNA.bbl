@@ -410,6 +410,11 @@ Friddle, R.~W., A.~Noy, and J.~J. De~Yoreo, 2012.
 \newblock \emph{Proceedings of the National Academy of Sciences}
   109:13573--13578.
 
+\bibitem[Bullerjahn et~al.(2014)Bullerjahn, Sturm, and Kroy]{bullerjahn2014}
+Bullerjahn, J.~T., S.~Sturm, and K.~Kroy, 2014.
+\newblock Theory of Rapid Force Spectroscopy.
+\newblock \emph{Nature Communications} 5.
+
 \bibitem[Raible et~al.(2006)Raible, Evstigneev, Bartels, Eckel, {Nguyen-Duong},
   Merkel, Ros, Anselmetti, and Reimann]{raible2006}
 Raible, M., M.~Evstigneev, F.~Bartels, R.~Eckel, M.~{Nguyen-Duong}, R.~Merkel,
@@ -418,30 +423,24 @@ Raible, M., M.~Evstigneev, F.~Bartels, R.~Eckel, M.~{Nguyen-Duong}, R.~Merkel,
   Experiments}}: {{Heterogeneity}} of {{Chemical Bonds}}.
 \newblock \emph{Biophysical Journal} 90:3851--3864.
 
-\bibitem[Smith et~al.(1996)Smith, Cui, and Bustamante]{smith1996}
-Smith, S.~B., Y.~Cui, and C.~Bustamante, 1996.
-\newblock Overstretching {{B-DNA}}: {{The Elastic Response}} of {{Individual
-  Double-Stranded}} and {{Single-Stranded DNA Molecules}}.
-\newblock \emph{Science} 271:795--799.
+\bibitem[Rico and Moy(2007)]{rico2007}
+Rico, F., and V.~T. Moy, 2007.
+\newblock Energy Landscape Roughness of the Streptavidin\textendash Biotin
+  Interaction.
+\newblock \emph{Journal of Molecular Recognition} 20:495--501.
 
-\bibitem[Bouchiat et~al.(1999)Bouchiat, Wang, Allemand, Strick, Block, and
-  Croquette]{bouchiat1999}
-Bouchiat, C., M.~Wang, J.-F. Allemand, T.~Strick, S.~Block, and V.~Croquette,
-  1999.
-\newblock Estimating the {{Persistence Length}} of a {{Worm-Like Chain
-  Molecule}} from {{Force-Extension Measurements}}.
-\newblock \emph{Biophysical Journal} 76:409--413.
+\bibitem[Robert et~al.(2011)Robert, Nicolas, {Aranda-Espinoza}, Bongrand, and
+  Limozin]{robert2011}
+Robert, P., A.~Nicolas, S.~{Aranda-Espinoza}, P.~Bongrand, and L.~Limozin,
+  2011.
+\newblock Minimal {{Encounter Time}} and {{Separation Determine Ligand-Receptor
+  Binding}} in {{Cell Adhesion}}.
+\newblock \emph{Biophysical Journal} 100:2642--2651.
 
-\bibitem[Baumann et~al.(1997)Baumann, Smith, Bloomfield, and
-  Bustamante]{baumann1997}
-Baumann, C.~G., S.~B. Smith, V.~A. Bloomfield, and C.~Bustamante, 1997.
-\newblock Ionic Effects on the Elasticity of Single {{DNA}} Molecules.
-\newblock \emph{Proceedings of the National Academy of Sciences} 94:6185--6190.
-
-\bibitem[Smith et~al.(1992)Smith, Finzi, and Bustamante]{smith1992}
-Smith, S.~B., L.~Finzi, and C.~Bustamante, 1992.
-\newblock Direct {{Mechanical Measurements}} of the {{Elasticity}} of {{Single
-  DNA Molecules}} by {{Using Magnetic Beads}}.
-\newblock \emph{Science} 258:1122--1126.
+\bibitem[Limozin et~al.(2016)Limozin, Bongrand, and Robert]{limozin2016}
+Limozin, L., P.~Bongrand, and P.~Robert, 2016.
+\newblock A {{Rough Energy Landscape}} to {{Describe Surface-Linked Antibody}}
+  and {{Antigen Bond Formation}}.
+\newblock \emph{Scientific Reports} 6:35193.
 
 \end{thebibliography}
