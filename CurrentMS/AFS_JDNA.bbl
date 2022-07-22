@@ -1,4 +1,4 @@
-\begin{thebibliography}{64}
+\begin{thebibliography}{65}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{ }
 
@@ -410,10 +410,10 @@ Friddle, R.~W., A.~Noy, and J.~J. De~Yoreo, 2012.
 \newblock \emph{Proceedings of the National Academy of Sciences}
   109:13573--13578.
 
-\bibitem[Bullerjahn et~al.(2014)Bullerjahn, Sturm, and Kroy]{bullerjahn2014}
-Bullerjahn, J.~T., S.~Sturm, and K.~Kroy, 2014.
-\newblock Theory of Rapid Force Spectroscopy.
-\newblock \emph{Nature Communications} 5.
+\bibitem[Hummer and Szabo(2003)]{hummer2003}
+Hummer, G., and A.~Szabo, 2003.
+\newblock Kinetics from {{Nonequilibrium Single-Molecule Pulling Experiments}}.
+\newblock \emph{Biophysical Journal} 85:5--15.
 
 \bibitem[Raible et~al.(2006)Raible, Evstigneev, Bartels, Eckel, {Nguyen-Duong},
   Merkel, Ros, Anselmetti, and Reimann]{raible2006}
@@ -422,6 +422,12 @@ Raible, M., M.~Evstigneev, F.~Bartels, R.~Eckel, M.~{Nguyen-Duong}, R.~Merkel,
 \newblock Theoretical {{Analysis}} of {{Single-Molecule Force Spectroscopy
   Experiments}}: {{Heterogeneity}} of {{Chemical Bonds}}.
 \newblock \emph{Biophysical Journal} 90:3851--3864.
+
+\bibitem[Xia et~al.(2022)Xia, Zuo, and Li]{xia2022}
+Xia, J., J.~Zuo, and H.~Li, 2022.
+\newblock Molecular Homogeneity of {{GB1}} Revealed by Single Molecule Force
+  Spectroscopy.
+\newblock \emph{Nanoscale} 14:9925--9931.
 
 \bibitem[Rico and Moy(2007)]{rico2007}
 Rico, F., and V.~T. Moy, 2007.

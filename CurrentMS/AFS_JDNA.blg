@@ -4,44 +4,44 @@ The top-level auxiliary file: AFS_JDNA.aux
 The style file: biophysj.bst
 Database file #1: AFS-JDNA_MS.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 64 entries,
+You've used 65 entries,
             3176 wiz_defined-function locations,
-            1022 strings with 19053 characters,
-and the built_in function-call counts, 37059 in all, are:
-= -- 2520
-> -- 2388
-< -- 11
-+ -- 774
-- -- 646
-* -- 2862
-:= -- 5262
-add.period$ -- 192
-call.type$ -- 64
-change.case$ -- 64
-chr.to.int$ -- 64
-cite$ -- 64
-duplicate$ -- 3013
-empty$ -- 2815
-format.name$ -- 793
-if$ -- 7565
+            1029 strings with 19211 characters,
+and the built_in function-call counts, 37607 in all, are:
+= -- 2570
+> -- 2404
+< -- 12
++ -- 780
+- -- 650
+* -- 2902
+:= -- 5333
+add.period$ -- 195
+call.type$ -- 65
+change.case$ -- 65
+chr.to.int$ -- 65
+cite$ -- 65
+duplicate$ -- 3054
+empty$ -- 2864
+format.name$ -- 801
+if$ -- 7680
 int.to.chr$ -- 1
-int.to.str$ -- 65
-missing$ -- 706
-newline$ -- 325
-num.names$ -- 192
-pop$ -- 962
+int.to.str$ -- 66
+missing$ -- 715
+newline$ -- 330
+num.names$ -- 195
+pop$ -- 974
 preamble$ -- 1
-purify$ -- 64
+purify$ -- 65
 quote$ -- 0
-skip$ -- 588
+skip$ -- 598
 stack$ -- 0
-substring$ -- 1866
-swap$ -- 1665
+substring$ -- 1915
+swap$ -- 1689
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 448
+type$ -- 455
 warning$ -- 0
-while$ -- 243
+while$ -- 249
 width$ -- 0
-write$ -- 836
+write$ -- 849

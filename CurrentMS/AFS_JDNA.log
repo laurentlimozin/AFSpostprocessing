@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.3.9)  21 JUL 2022 19:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.3.9)  22 JUL 2022 23:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1199,6 +1199,9 @@ Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 (/usr/share/texlive/texmf-dist/tex/latex/placeins/placeins.sty
 Package: placeins 2005/04/18  v 2.2
 )
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
 (/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
 Package: lipsum 2014/07/27 v1.3 150 paragraphs of Lorem Ipsum dummy text
 \c@lips@count=\count290
@@ -1324,34 +1327,34 @@ LaTeX Info: Redefining \nameref on input line 49.
 \@outlinefile=\write3
 \openout3 = `AFS_JDNA.out'.
 
-LaTeX Font Info:    Try loading font information for T1+phv on input line 65.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 66.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 9.49997pt on input line 65.
+(Font)              scaled to size 9.49997pt on input line 66.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `phv' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 65.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 9.49997pt on input line 65.
+(Font)              scaled to size 9.49997pt on input line 66.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 16.41594pt on input line 65.
+(Font)              scaled to size 16.41594pt on input line 66.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 65.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 16.41594pt on input line 65.
+(Font)              scaled to size 16.41594pt on input line 66.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 65.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <20.74> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 65.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 19.70294pt on input line 65.
-LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 65
+(Font)              scaled to size 19.70294pt on input line 66.
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 66
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
@@ -1361,45 +1364,45 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `ztmcm' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 65
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 66
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 65
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 66
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 65
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 66
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 65.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 66.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmss' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 7.02997pt on input line 65.
+(Font)              scaled to size 7.02997pt on input line 66.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 67.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 68.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 11.39996pt on input line 67.
+(Font)              scaled to size 11.39996pt on input line 68.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 (Font)              scaled to size 7.59998pt on input line 72.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <8> not available
@@ -1408,77 +1411,84 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 7.59998pt on input line 72.
  [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 91.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 98.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 91.
- [2] [3]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 98.
+ [4] [5]
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-Underfull \hbox (badness 10000) in paragraph at lines 146--148
+Underfull \hbox (badness 10000) in paragraph at lines 154--156
+
+ []
+
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 157--159
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 149--151
+Underfull \hbox (badness 10000) in paragraph at lines 160--161
+
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 184--187
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 152--153
-
- []
-
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 176--179
+Underfull \hbox (badness 10000) in paragraph at lines 188--191
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 180--183
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 184--185
-
- []
-
-[5]
-<Figures/fig1.png, id=186, 1515.5019pt x 970.3452pt>
+[8]
+<Figures/fig1.png, id=198, 1515.5019pt x 970.3452pt>
 File: Figures/fig1.png Graphic file (type png)
 <use Figures/fig1.png>
-Package pdftex.def Info: Figures/fig1.png  used on input line 232.
+Package pdftex.def Info: Figures/fig1.png  used on input line 240.
 (pdftex.def)             Requested size: 374.40005pt x 239.71329pt.
- [6 <./Figures/fig1.png>]
-<Figures/fig2.png, id=210, 2136.783pt x 852.0633pt>
+ [9] [10 <./Figures/fig1.png>]
+<Figures/fig2.png, id=231, 2136.783pt x 852.0633pt>
 File: Figures/fig2.png Graphic file (type png)
 <use Figures/fig2.png>
-Package pdftex.def Info: Figures/fig2.png  used on input line 247.
+Package pdftex.def Info: Figures/fig2.png  used on input line 254.
 (pdftex.def)             Requested size: 499.20007pt x 199.05177pt.
- [7 <./Figures/fig2.png>]
-<Figures/fig3.png, id=239, 866.2764pt x 433.1382pt>
+ [11 <./Figures/fig2.png>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [12]
+<Figures/fig3.png, id=273, 882.22575pt x 433.62pt>
 File: Figures/fig3.png Graphic file (type png)
 <use Figures/fig3.png>
-Package pdftex.def Info: Figures/fig3.png  used on input line 302.
-(pdftex.def)             Requested size: 374.40005pt x 187.20412pt.
- [8]
-<Figures/offrate_vs_force_Nef.png, id=271, 433.62pt x 433.62pt>
+Package pdftex.def Info: Figures/fig3.png  used on input line 308.
+(pdftex.def)             Requested size: 374.40005pt x 184.0181pt.
+
+[13 <./Figures/fig3.png>]
+<Figures/offrate_vs_force_Nef.png, id=301, 433.62pt x 433.62pt>
 File: Figures/offrate_vs_force_Nef.png Graphic file (type png)
 <use Figures/offrate_vs_force_Nef.png>
 Package pdftex.def Info: Figures/offrate_vs_force_Nef.png  used on input line 3
-17.
+23.
 (pdftex.def)             Requested size: 199.67697pt x 199.67935pt.
- [9 <./Figures/fig3.png>] [10 <./Figures/offrate_vs_force_Nef.png>] (./AFS_JDNA
-.bbl [11] [12]
-[13]) [14]
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 436.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [14 <./Figures/offrate_vs_force_Nef.png>] [15] (./AFS_JDNA.bbl [16] [17] [18] 
+[19]
+[20]) [21]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 430.
 
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
@@ -1487,167 +1497,170 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<Figures/TableS1.png, id=338, 1297.84875pt x 224.84pt>
+<Figures/TableS1.png, id=378, 1297.84875pt x 224.84pt>
 File: Figures/TableS1.png Graphic file (type png)
 <use Figures/TableS1.png>
-Package pdftex.def Info: Figures/TableS1.png  used on input line 461.
+Package pdftex.def Info: Figures/TableS1.png  used on input line 455.
 (pdftex.def)             Requested size: 499.20007pt x 86.4796pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 464--467
+Underfull \hbox (badness 10000) in paragraph at lines 458--461
 
  []
 
-<Figures/TableS2pdf.png, id=339, 1141.26375pt x 231.86626pt>
+<Figures/TableS2pdf.png, id=379, 1141.26375pt x 231.86626pt>
 File: Figures/TableS2pdf.png Graphic file (type png)
 <use Figures/TableS2pdf.png>
-Package pdftex.def Info: Figures/TableS2pdf.png  used on input line 471.
+Package pdftex.def Info: Figures/TableS2pdf.png  used on input line 465.
 (pdftex.def)             Requested size: 499.20007pt x 101.42pt.
-[15 <./Figures/TableS1.png> <./Figures/TableS2pdf.png>]
-<Figures/TableS3.png, id=349, 1432.35126pt x 829.0975pt>
+[22 <./Figures/TableS1.png> <./Figures/TableS2pdf.png>]
+<Figures/TableS3.png, id=389, 1432.35126pt x 829.0975pt>
 File: Figures/TableS3.png Graphic file (type png)
 <use Figures/TableS3.png>
-Package pdftex.def Info: Figures/TableS3.png  used on input line 480.
+Package pdftex.def Info: Figures/TableS3.png  used on input line 474.
 (pdftex.def)             Requested size: 499.20007pt x 288.94867pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 483--495
+Underfull \hbox (badness 10000) in paragraph at lines 477--489
 
  []
 
-[16 <./Figures/TableS3.png>]
-<Figures/TableS4.png, id=358, 1514.65875pt x 650.43pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [23 <./Figures/TableS3.png>] [24]
+<Figures/TableS4.png, id=402, 1514.65875pt x 650.43pt>
 File: Figures/TableS4.png Graphic file (type png)
 <use Figures/TableS4.png>
-Package pdftex.def Info: Figures/TableS4.png  used on input line 501.
+Package pdftex.def Info: Figures/TableS4.png  used on input line 495.
 (pdftex.def)             Requested size: 499.20007pt x 214.36467pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 503--508
+Underfull \hbox (badness 10000) in paragraph at lines 497--502
 
  []
 
-[17 <./Figures/TableS4.png>]
-<Figures/220718_FigS1_CG.png, id=365, 2102.5752pt x 1583.1948pt>
+[25 <./Figures/TableS4.png>]
+<Figures/220718_FigS1_CG.png, id=410, 2102.5752pt x 1583.1948pt>
 File: Figures/220718_FigS1_CG.png Graphic file (type png)
 <use Figures/220718_FigS1_CG.png>
-Package pdftex.def Info: Figures/220718_FigS1_CG.png  used on input line 518.
+Package pdftex.def Info: Figures/220718_FigS1_CG.png  used on input line 512.
 (pdftex.def)             Requested size: 499.20007pt x 375.86772pt.
-<Figures/figS2.png, id=366, 1313.26636pt x 361.22955pt>
+<Figures/figS2.png, id=411, 1313.26636pt x 361.22955pt>
 File: Figures/figS2.png Graphic file (type png)
 <use Figures/figS2.png>
-Package pdftex.def Info: Figures/figS2.png  used on input line 528.
+Package pdftex.def Info: Figures/figS2.png  used on input line 522.
 (pdftex.def)             Requested size: 499.20007pt x 137.30722pt.
-<Figures/multispectrumx_Rapa.png, id=369, 1734.48pt x 975.645pt>
+<Figures/multispectrumx_Rapa.png, id=416, 1734.48pt x 975.645pt>
 File: Figures/multispectrumx_Rapa.png Graphic file (type png)
 <use Figures/multispectrumx_Rapa.png>
-Package pdftex.def Info: Figures/multispectrumx_Rapa.png  used on input line 55
-0.
+Package pdftex.def Info: Figures/multispectrumx_Rapa.png  used on input line 54
+4.
 (pdftex.def)             Requested size: 658.20007pt x 370.2428pt.
-<Figures/multispectrumy_Rapa.png, id=372, 1734.48pt x 975.645pt>
+<Figures/multispectrumy_Rapa.png, id=419, 1734.48pt x 975.645pt>
 File: Figures/multispectrumy_Rapa.png Graphic file (type png)
 <use Figures/multispectrumy_Rapa.png>
 Package pdftex.def Info: Figures/multispectrumy_Rapa.png  used on input line 55
-9.
+3.
 (pdftex.def)             Requested size: 658.20007pt x 370.2428pt.
-<Figures/multispectrumy_Nef.png, id=375, 650.43pt x 650.43pt>
+<Figures/multispectrumy_Nef.png, id=422, 650.43pt x 650.43pt>
 File: Figures/multispectrumy_Nef.png Graphic file (type png)
 <use Figures/multispectrumy_Nef.png>
-Package pdftex.def Info: Figures/multispectrumy_Nef.png  used on input line 566
+Package pdftex.def Info: Figures/multispectrumy_Nef.png  used on input line 560
 .
 (pdftex.def)             Requested size: 374.40005pt x 374.41118pt.
-<Figures/Fig_calibration on the fly.png, id=378, 771.1209pt x 590.4459pt>
+<Figures/Fig_calibration on the fly.png, id=425, 771.1209pt x 590.4459pt>
 File: Figures/Fig_calibration on the fly.png Graphic file (type png)
 <use Figures/Fig_calibration on the fly.png>
 Package pdftex.def Info: Figures/Fig_calibration on the fly.png  used on input 
-line 574.
+line 568.
 (pdftex.def)             Requested size: 399.36157pt x 305.79933pt.
-<Figures/Power_Stiffness_Ter_Rapa.png, id=379, 1517.67pt x 650.43pt>
+<Figures/Power_Friction_Bis_RapaRemoveLegend.png, id=426, 1517.67pt x 650.43pt>
+
+File: Figures/Power_Friction_Bis_RapaRemoveLegend.png Graphic file (type png)
+<use Figures/Power_Friction_Bis_RapaRemoveLegend.png>
+Package pdftex.def Info: Figures/Power_Friction_Bis_RapaRemoveLegend.png  used 
+on input line 575.
+(pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
+<Figures/Power_Stiffness_Ter_Rapa.png, id=427, 1517.67pt x 650.43pt>
 File: Figures/Power_Stiffness_Ter_Rapa.png Graphic file (type png)
 <use Figures/Power_Stiffness_Ter_Rapa.png>
 Package pdftex.def Info: Figures/Power_Stiffness_Ter_Rapa.png  used on input li
-ne 581.
+ne 583.
 (pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
-<Figures/fig_Radius.png, id=380, 467.1051pt x 222.8325pt>
+<Figures/fig_Radius.png, id=428, 467.1051pt x 222.8325pt>
 File: Figures/fig_Radius.png Graphic file (type png)
 <use Figures/fig_Radius.png>
-Package pdftex.def Info: Figures/fig_Radius.png  used on input line 589.
+Package pdftex.def Info: Figures/fig_Radius.png  used on input line 591.
 (pdftex.def)             Requested size: 299.52309pt x 142.88773pt.
-<Figures/Power_Friction_Bis_Rapa.png, id=381, 1517.67pt x 650.43pt>
-File: Figures/Power_Friction_Bis_Rapa.png Graphic file (type png)
-<use Figures/Power_Friction_Bis_Rapa.png>
-Package pdftex.def Info: Figures/Power_Friction_Bis_Rapa.png  used on input lin
-e 596.
-(pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
-<Figures/Force_Lengths_Bis_Rapa.png, id=382, 1517.67pt x 650.43pt>
+<Figures/Force_Lengths_Bis_Rapa.png, id=429, 1517.67pt x 650.43pt>
 File: Figures/Force_Lengths_Bis_Rapa.png Graphic file (type png)
 <use Figures/Force_Lengths_Bis_Rapa.png>
 Package pdftex.def Info: Figures/Force_Lengths_Bis_Rapa.png  used on input line
- 637.
+ 633.
 (pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
-<Figures/fig_WLC_FJC.png, id=383, 880.7304pt x 462.2871pt>
-File: Figures/fig_WLC_FJC.png Graphic file (type png)
-<use Figures/fig_WLC_FJC.png>
-Package pdftex.def Info: Figures/fig_WLC_FJC.png  used on input line 648.
-(pdftex.def)             Requested size: 499.20007pt x 262.02504pt.
-<Figures/multisurvival2Bis_Rapa.png, id=384, 1734.48pt x 975.645pt>
+<Figures/multisurvival2Bis_Rapa.png, id=430, 1734.48pt x 975.645pt>
 File: Figures/multisurvival2Bis_Rapa.png Graphic file (type png)
 <use Figures/multisurvival2Bis_Rapa.png>
 Package pdftex.def Info: Figures/multisurvival2Bis_Rapa.png  used on input line
- 670.
+ 666.
 (pdftex.def)             Requested size: 658.20007pt x 370.2428pt.
-<Figures/offrate_vs_forceBis_Rapa.png, id=385, 1517.67pt x 650.43pt>
+<Figures/offrate_vs_forceBis_Rapa.png, id=431, 1517.67pt x 650.43pt>
 File: Figures/offrate_vs_forceBis_Rapa.png Graphic file (type png)
 <use Figures/offrate_vs_forceBis_Rapa.png>
 Package pdftex.def Info: Figures/offrate_vs_forceBis_Rapa.png  used on input li
-ne 677.
+ne 673.
 (pdftex.def)             Requested size: 658.20007pt x 282.09116pt.
-<Figures/Power_vs_Force_Bis_Nef.png, id=386, 650.43pt x 650.43pt>
+<Figures/Power_vs_Force_Bis_Nef.png, id=432, 650.43pt x 650.43pt>
 File: Figures/Power_vs_Force_Bis_Nef.png Graphic file (type png)
 <use Figures/Power_vs_Force_Bis_Nef.png>
 Package pdftex.def Info: Figures/Power_vs_Force_Bis_Nef.png  used on input line
- 684.
+ 680.
 (pdftex.def)             Requested size: 374.40005pt x 374.41118pt.
-<Figures/multisurvival2Bis_Nef.png, id=387, 650.43pt x 650.43pt>
+<Figures/multisurvival2Bis_Nef.png, id=433, 650.43pt x 650.43pt>
 File: Figures/multisurvival2Bis_Nef.png Graphic file (type png)
 <use Figures/multisurvival2Bis_Nef.png>
 Package pdftex.def Info: Figures/multisurvival2Bis_Nef.png  used on input line 
-691.
+687.
 (pdftex.def)             Requested size: 374.40005pt x 374.41118pt.
-<Figures/Maturation_Rapa.png, id=388, 433.62pt x 433.62pt>
+<Figures/Maturation_Rapa.png, id=434, 433.62pt x 433.62pt>
 File: Figures/Maturation_Rapa.png Graphic file (type png)
 <use Figures/Maturation_Rapa.png>
-Package pdftex.def Info: Figures/Maturation_Rapa.png  used on input line 698.
+Package pdftex.def Info: Figures/Maturation_Rapa.png  used on input line 694.
 (pdftex.def)             Requested size: 299.52309pt x 299.53557pt.
- [18 <./Figures/220718_FigS1_CG.png>] [19 <./Figures/figS2.png>] [20 <./Figures
-/multispectrumx_Rapa.png>] [21 <./Figures/multispectrumy_Rapa.png>] [22 <./Figu
-res/multispectrumy_Nef.png>] [23 <./Figures/Fig_calibration on the fly.png>] [2
-4 <./Figures/Power_Stiffness_Ter_Rapa.png>]
-[25 <./Figures/fig_Radius.png>] [26 <./Figures/Power_Friction_Bis_Rapa.png>]
-[27 <./Figures/Force_Lengths_Bis_Rapa.png>] [28 <./Figures/fig_WLC_FJC.png>]
-[29 <./Figures/multisurvival2Bis_Rapa.png>] [30 <./Figures/offrate_vs_forceBis_
-Rapa.png>] [31 <./Figures/Power_vs_Force_Bis_Nef.png>] [32 <./Figures/multisurv
-ival2Bis_Nef.png>] [33 <./Figures/Maturation_Rapa.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 790--812
+ [26 <./Figures/220718_FigS1_CG.png>] [27 <./Figures/figS2.png>] [28 <./Figures
+/multispectrumx_Rapa.png>] [29 <./Figures/multispectrumy_Rapa.png>] [30 <./Figu
+res/multispectrumy_Nef.png>] [31 <./Figures/Fig_calibration on the fly.png>] [3
+2 <./Figures/Power_Friction_Bis_RapaRemoveLegend.png>] [33 <./Figures/Power_Sti
+ffness_Ter_Rapa.png>] [34 <./Figures/fig_Radius.png>] [35 <./Figures/Force_Leng
+ths_Bis_Rapa.png>] [36 <./Figures/multisurvival2Bis_Rapa.png>] [37 <./Figures/o
+ffrate_vs_forceBis_Rapa.png>] [38 <./Figures/Power_vs_Force_Bis_Nef.png>] [39 <
+./Figures/multisurvival2Bis_Nef.png>] [40 <./Figures/Maturation_Rapa.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 786--808
 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 813.
-[34
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [41
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 813.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 809.
+
+[42]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 809.
  (./AFS_JDNA.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 813.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 813.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 809.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 809.
 Package rerunfilecheck Info: File `AFS_JDNA.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 21420 strings out of 494821
- 372049 string characters out of 6177892
- 600089 words of memory out of 5000000
- 24129 multiletter control sequences out of 15000+600000
+ 21454 strings out of 494821
+ 372570 string characters out of 6177892
+ 600422 words of memory out of 5000000
+ 24151 multiletter control sequences out of 15000+600000
  600105 words of font info for 232 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 43i,15n,67p,10412b,555s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,15n,67p,10412b,553s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/laurent/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.6
 00pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/t
@@ -1661,10 +1674,10 @@ re/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/ut
 mri8a.pfb>
-Output written on AFS_JDNA.pdf (34 pages, 26180841 bytes).
+Output written on AFS_JDNA.pdf (42 pages, 25430085 bytes).
 PDF statistics:
- 561 PDF objects out of 1000 (max. 8388607)
- 443 compressed objects within 5 object streams
- 129 named destinations out of 1000 (max. 500000)
- 35449 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 606 PDF objects out of 1000 (max. 8388607)
+ 480 compressed objects within 5 object streams
+ 137 named destinations out of 1000 (max. 500000)
+ 35444 words of extra memory for PDF output out of 35830 (max. 10000000)
 
